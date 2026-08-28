@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Abdul Hakim Nur — Informatika & Ilustrator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f9f9f9; font-family: 'Noto Serif', serif; }
+        .ticker-wrap { overflow: hidden; white-space: nowrap; border-top: 1px solid #c6c6c6; border-bottom: 1px solid #c6c6c6; }
+        .ticker-inner { display: inline-block; animation: ticker 22s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .ticker-wrap:hover .ticker-inner { animation-play-state: paused; }
+        .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        nav a { font-family: 'Noto Serif', serif; }
+    </style>
+</head>
+<body class="selection:bg-black selection:text-white">
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
+        <div class="flex justify-between items-center px-8 md:px-12 py-6 max-w-screen-2xl mx-auto">
+            <span style="font-family:'Noto Serif',serif" class="text-xl font-bold tracking-tighter text-black">Abdul Hakim Nur</span>
+            <div class="hidden md:flex items-center space-x-10">
+                <a class="text-black font-bold border-b border-black pb-0.5 text-sm tracking-tight" href="Home.html">Beranda</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm tracking-tight" href="About.html">Tentang</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm tracking-tight" href="Portofolio.html">Portofolio</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm tracking-tight" href="Pengalaman.html">Pengalaman</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm tracking-tight" href="Kontak.html">Kontak</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32">
+        <section class="max-w-screen-2xl mx-auto px-8 mb-24 fade-up">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
+                <div class="md:col-span-8">
+                    <h1 style="font-family:'Noto Serif',serif" class="text-6xl md:text-8xl font-normal tracking-tighter leading-tight mb-12">
+                        Abdul Hakim Nur — Mahasiswa Informatika & Ilustrator Digital
+                    </h1>
+                    <p class="text-xl md:text-2xl text-zinc-500 font-light leading-relaxed max-w-2xl">
+                        Membangun solusi digital yang fungsional sekaligus visual. Dari sistem backend Laravel hingga karya ilustrasi karakter — dikerjakan dengan presisi dan niat.
+                    </p>
+                </div>
+                <div class="md:col-span-4 flex flex-col items-start md:items-end gap-6">
+                    <div class="text-right">
+                        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-1">Lokasi</span>
+                        <p style="font-family:'Noto Serif',serif" class="italic text-lg">Surabaya, Indonesia</p>
+                    </div>
+                    <a href="Portofolio.html">
+                        <button class="bg-black text-white px-10 py-4 text-xs font-sans tracking-widest uppercase hover:bg-zinc-800 transition-all">
+                            Lihat Portofolio →
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <div class="ticker-wrap py-5 mb-32 fade-up">
+            <div class="ticker-inner">
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mx-10">Web Development</span>
+                <span style="font-family:'Noto Serif',serif" class="italic text-lg mx-10">✦</span>
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mx-10">Laravel & PHP</span>
+                <span style="font-family:'Noto Serif',serif" class="italic text-lg mx-10">✦</span>
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mx-10">Character Design</span>
+                <span style="font-family:'Noto Serif',serif" class="italic text-lg mx-10">✦</span>
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mx-10">MySQL & Database</span>
+                <span style="font-family:'Noto Serif',serif" class="italic text-lg mx-10">✦</span>
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mx-10">Figma & UI Design</span>
+                <span style="font-family:'Noto Serif',serif" class="italic text-lg mx-10">✦</span>
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mx-10">Web Development</span>
+                <span style="font-family:'Noto Serif',serif" class="italic text-lg mx-10">✦</span>
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mx-10">Laravel & PHP</span>
+                <span style="font-family:'Noto Serif',serif" class="italic text-lg mx-10">✦</span>
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mx-10">Character Design</span>
+                <span style="font-family:'Noto Serif',serif" class="italic text-lg mx-10">✦</span>
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mx-10">MySQL & Database</span>
+                <span style="font-family:'Noto Serif',serif" class="italic text-lg mx-10">✦</span>
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mx-10">Figma & UI Design</span>
+                <span style="font-family:'Noto Serif',serif" class="italic text-lg mx-10">✦</span>
+            </div>
+        </div>
+
+       <section class="max-w-screen-2xl mx-auto px-8 mb-40 fade-up">
+    <div class="flex justify-between items-baseline border-t border-gray-200 pt-8 mb-16">
+        <h2 style="font-family:'Noto Serif',serif" class="text-4xl tracking-tighter">Proyek Pilihan</h2>
+        <a href="Portofolio.html" class="font-sans text-xs tracking-widest uppercase border-b border-black pb-0.5 hover:text-zinc-400 transition-colors">Lihat Semua</a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <a href="Portofolio.html" class="group block">
+            <div class="aspect-video bg-zinc-100 overflow-hidden mb-6 relative flex items-center justify-center">
+                <img src="./img/polda.png" alt="Sistem Informasi Polda" class="w-full h-full object-cover"/>
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500"></div>
+            </div>
+            <div class="flex justify-between items-start">
+                <div>
+                    <h3 style="font-family:'Noto Serif',serif" class="text-2xl font-bold text-black mb-2">Sistem Informasi Polda</h3>
+                    <p class="font-sans text-xs uppercase tracking-widest text-zinc-400">Laravel · MySQL · Backend</p>
+                </div>
+                <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400">2024</span>
+            </div>
+        </a>
+        <a href="Portofolio.html" class="group block">
+            <div class="aspect-video bg-zinc-100 overflow-hidden mb-6 relative flex items-center justify-center">
+                <img src="./img/aniv.png" alt="Anniversary Website" class="w-full h-full object-cover"/>
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500"></div>
+            </div>
+            <div class="flex justify-between items-start">
+                <div>
+                    <h3 style="font-family:'Noto Serif',serif" class="text-2xl font-bold text-black mb-2">Anniversary Website</h3>
+                    <p class="font-sans text-xs uppercase tracking-widest text-zinc-400">HTML · CSS · JS · Netlify</p>
+                </div>
+                <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400">2024</span>
+            </div>
+        </a>
+    </div>
+</section>
+
+        <section class="max-w-screen-2xl mx-auto px-8 mb-40 fade-up">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-24">
+                <div class="border-t border-gray-200 pt-8">
+                    <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-8">Pengembangan Web</span>
+                    <p class="text-lg leading-relaxed mb-8 text-zinc-700">Membangun website dari nol — statis maupun sistem database dengan PHP, Laravel, dan MySQL. Kode yang bersih adalah standar, bukan opsi.</p>
+                    <a class="font-sans text-xs tracking-widest uppercase border-b border-black pb-0.5 hover:text-zinc-400 transition-colors" href="About.html">Tentang Saya →</a>
+                </div>
+                <div class="border-t border-gray-200 pt-8">
+                    <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-8">Ilustrasi Digital</span>
+                    <p class="text-lg leading-relaxed mb-8 text-zinc-700">Spesialisasi character design. Berkolaborasi aktif dengan komunitas kreatif online dan mengerjakan komisi karakter sejak 2023.</p>
+                    <a class="font-sans text-xs tracking-widest uppercase border-b border-black pb-0.5 hover:text-zinc-400 transition-colors" href="Portofolio.html">Lihat Galeri →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-gray-200 py-12 flex flex-col md:flex-row justify-between items-center px-8 max-w-screen-2xl mx-auto">
+        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-4 md:mb-0">© 2026 Abdul Hakim Nur</span>
+        <div class="flex gap-8">
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="Kontak.html">Email</a>
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">GitHub</a>
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">LinkedIn</a>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

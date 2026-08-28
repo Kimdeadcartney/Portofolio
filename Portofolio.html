@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Portofolio — Abdul Hakim Nur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f9f9f9; font-family: 'Noto Serif', serif; }
+        .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .filter-btn.active { background: #000; color: #fff; }
+        .project-card { transition: opacity 0.3s ease, transform 0.3s ease; }
+
+        /* Modal */
+        #project-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0,0,0,0);
+            transition: background 0.35s ease;
+        }
+        #project-modal.open {
+            display: flex;
+            background: rgba(0,0,0,0.75);
+        }
+        #modal-panel {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            max-width: 720px;
+            background: #fff;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        #project-modal.open #modal-panel {
+            transform: translateX(0);
+        }
+
+        /* Gallery */
+        .gallery-track {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .gallery-track::-webkit-scrollbar { display: none; }
+        .gallery-item {
+            flex: 0 0 100%;
+            scroll-snap-align: start;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            background: #f3f3f3;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .gallery-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Dot indicator */
+        .gallery-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #d4d4d4;
+            transition: background 0.2s, width 0.2s;
+            cursor: pointer;
+        }
+        .gallery-dot.active {
+            background: #000;
+            width: 20px;
+            border-radius: 3px;
+        }
+
+        /* Thumbnail strip */
+        .thumb-strip { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+        .thumb-strip::-webkit-scrollbar { display: none; }
+        .thumb-item {
+            flex: 0 0 80px;
+            height: 56px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .thumb-item.active { border-color: #000; }
+        .thumb-item img { width: 100%; height: 100%; object-fit: cover; }
+        .thumb-item .thumb-placeholder {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            #modal-panel { max-width: 100%; }
+        }
+    </style>
+</head>
+<body class="selection:bg-black selection:text-white">
+
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
+        <div class="flex justify-between items-center px-8 md:px-12 py-6 max-w-screen-2xl mx-auto">
+            <a href="Home.html" style="font-family:'Noto Serif',serif" class="text-xl font-bold tracking-tighter text-black">Abdul Hakim Nur</a>
+            <div class="hidden md:flex items-center space-x-10">
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Home.html">Beranda</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="About.html">Tentang</a>
+                <a class="text-black font-bold border-b border-black pb-0.5 text-sm" href="Portofolio.html">Portofolio</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Pengalaman.html">Pengalaman</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Kontak.html">Kontak</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-40">
+        <section class="max-w-screen-2xl mx-auto px-8 mb-20 fade-up">
+            <div class="border-t border-gray-200 pt-12">
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-8">Portofolio</span>
+                <div class="flex flex-col md:flex-row md:justify-between md:items-end gap-8">
+                    <h1 style="font-family:'Noto Serif',serif" class="text-6xl md:text-8xl font-normal tracking-tighter">Karya & Proyek</h1>
+                    <p class="text-zinc-500 text-lg max-w-sm leading-relaxed">Koleksi proyek web dan ilustrasi digital yang dikerjakan dari 2022 hingga sekarang.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter -->
+        <section class="max-w-screen-2xl mx-auto px-8 mb-16 fade-up">
+            <div class="flex gap-3 flex-wrap">
+                <button onclick="filterProjects('all')" class="filter-btn active font-sans text-xs tracking-widest uppercase px-6 py-3 border border-black transition-all" data-filter="all">Semua</button>
+                <button onclick="filterProjects('web')" class="filter-btn font-sans text-xs tracking-widest uppercase px-6 py-3 border border-gray-200 hover:border-black transition-all" data-filter="web">Web Dev</button>
+                <button onclick="filterProjects('ilustrasi')" class="filter-btn font-sans text-xs tracking-widest uppercase px-6 py-3 border border-gray-200 hover:border-black transition-all" data-filter="ilustrasi">Ilustrasi</button>
+                <button onclick="filterProjects('kampus')" class="filter-btn font-sans text-xs tracking-widest uppercase px-6 py-3 border border-gray-200 hover:border-black transition-all" data-filter="kampus">Kampus</button>
+            </div>
+        </section>
+
+        <!-- Projects Grid -->
+        <section class="max-w-screen-2xl mx-auto px-8 fade-up">
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+
+                <!-- 1. Sistem Informasi Pariwisata PSO -->
+                <div class="project-card cursor-pointer" data-category="web kampus" onclick="openModal('pso')">
+                    <div class="aspect-video overflow-hidden mb-6 relative group bg-teal-50">
+                        <img src="./img/PSO.png" alt="Sistem Informasi Pariwisata Trenggalek"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/80">
+                            <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-6 py-3">Lihat Detail</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Sistem Informasi Pariwisata Trenggalek</h3>
+                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0">2026</span>
+                    </div>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-3">PHP · MySQL · PSO Algorithm</p>
+                    <p class="text-sm text-zinc-500 leading-relaxed">Sistem informasi pariwisata Kabupaten Trenggalek dengan rekomendasi wisata menggunakan metode <span style="font-family:'Noto Serif',serif" class="italic">Particle Swarm Optimization (PSO)</span>.</p>
+                </div>
+
+                <!-- 2. Sistem Informasi Polda -->
+                <div class="project-card cursor-pointer" data-category="web" onclick="openModal('polda')">
+                    <div class="aspect-video overflow-hidden mb-6 relative group bg-zinc-900">
+                        <img src="./img/polda.png" alt="Sistem Informasi Polda"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onerror="this.style.display='none'"/>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/80">
+                            <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-6 py-3">Lihat Detail</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Sistem Informasi Polda</h3>
+                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0">2024</span>
+                    </div>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-3">Laravel · MySQL · Backend</p>
+                    <p class="text-sm text-zinc-500 leading-relaxed">Sistem manajemen data telekomunikasi kepolisian — mencakup pengelolaan data Alkom, Tower, dan Repeater.</p>
+                </div>
+
+                <!-- 3. Anniversary Website -->
+                <div class="project-card cursor-pointer" data-category="web" onclick="openModal('aniv')">
+                    <div class="aspect-video overflow-hidden mb-6 relative group bg-pink-50">
+                        <img src="./img/aniv.png" alt="Anniversary Website"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onerror="this.style.display='none'"/>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/80">
+                            <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-6 py-3">Lihat Detail</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Anniversary Website</h3>
+                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0">2024</span>
+                    </div>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-3">HTML · CSS · JS · Netlify</p>
+                    <p class="text-sm text-zinc-500 leading-relaxed">Website interaktif untuk peringatan anniversary — galeri foto otomatis, surat cinta, animasi kucing berjalan, dan musik latar.</p>
+                </div>
+
+                <!-- 4. Kafe Web -->
+                <div class="project-card cursor-pointer" data-category="web kampus" onclick="openModal('kafe')">
+                    <div class="aspect-video overflow-hidden mb-6 relative group bg-amber-50">
+                        <img src="./img/cafe.png" alt="Kafe Web"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onerror="this.style.display='none'"/>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/80">
+                            <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-6 py-3">Lihat Detail</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Kafe Web</h3>
+                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0">2025</span>
+                    </div>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-3">HTML · CSS · JavaScript</p>
+                    <p class="text-sm text-zinc-500 leading-relaxed">Website multi-halaman untuk kafe — daftar coffee shop, detail menu, halaman about, dan kontak dengan layout responsif.</p>
+                </div>
+
+                <!-- 5. Data Mahasiswa CRUD -->
+                <div class="project-card cursor-pointer" data-category="web kampus" onclick="openModal('mahas')">
+                    <div class="aspect-video overflow-hidden mb-6 relative group bg-blue-50">
+                        <img src="./img/mahas.png" alt="Sistem Data Mahasiswa"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onerror="this.style.display='none'"/>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/80">
+                            <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-6 py-3">Lihat Detail</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Sistem Data Mahasiswa</h3>
+                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0">2023</span>
+                    </div>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-3">PHP · MySQL · CRUD</p>
+                    <p class="text-sm text-zinc-500 leading-relaxed">Aplikasi web untuk manajemen data mahasiswa — CRUD dengan autentikasi login dan register berbasis PHP native dan MySQL.</p>
+                </div>
+
+                <!-- 6. Deteksi Penyakit Daun Kentang -->
+                <div class="project-card cursor-pointer" data-category="web kampus" onclick="openModal('potato')">
+                    <div class="aspect-video overflow-hidden mb-6 relative group bg-green-50">
+                        <img src="./img/potato.jpg" alt="Deteksi Penyakit Daun Kentang"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onerror="this.style.display='none'"/>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/80">
+                            <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-6 py-3">Lihat Detail</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Deteksi Penyakit Daun Kentang</h3>
+                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0">2024</span>
+                    </div>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-3">Python · TensorFlow · Flask · Deep Learning</p>
+                    <p class="text-sm text-zinc-500 leading-relaxed">Aplikasi web deteksi penyakit daun kentang menggunakan <span style="font-family:'Noto Serif',serif" class="italic">deep learning</span> — petani unggah foto, sistem beri diagnosis akurat.</p>
+                </div>
+
+                <!-- 7. Ilustrasi Karakter Original -->
+                <div class="project-card cursor-pointer" data-category="ilustrasi" onclick="openModal('ilus2')">
+                    <div class="aspect-video overflow-hidden mb-6 relative group bg-violet-50">
+                        <img src="./img/ilus2.png" alt="Ilustrasi Karakter Original"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onerror="this.style.display='none'"/>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/80">
+                            <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-6 py-3">Lihat Detail</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Ilustrasi Karakter Original</h3>
+                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0">2023–2024</span>
+                    </div>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-3">Ilustrasi Digital · Character Design</p>
+                    <p class="text-sm text-zinc-500 leading-relaxed">Koleksi desain karakter orisinal untuk komunitas server online. Berbagai gaya dan ekspresi karakter.</p>
+                </div>
+
+              <!-- 9. Fleet Management System SMR -->
+<div class="project-card cursor-pointer" data-category="web" onclick="openModal('smr')">
+    <div class="aspect-video overflow-hidden mb-6 relative group bg-zinc-900">
+        <img src="./img/smsr.png" alt="Fleet Management System SMR"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            onerror="this.style.display='none'"/>
+        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/80">
+            <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-6 py-3">Lihat Detail</span>
+        </div>
+    </div>
+    <div class="flex justify-between items-start mb-3">
+        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Fleet Management System</h3>
+        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0">2026</span>
+    </div>
+    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-3">Laravel · MySQL · Chart.js · Dashboard</p>
+    <p class="text-sm text-zinc-500 leading-relaxed">Sistem manajemen armada alat berat untuk CV Sumber Makmur Rafa — monitoring unit, operator, maintenance, dan persewaan dalam satu dashboard terpadu.</p>
+</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-gray-200 py-12 flex flex-col md:flex-row justify-between items-center px-8 max-w-screen-2xl mx-auto">
+        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-4 md:mb-0">© 2024 Abdul Hakim Nur</span>
+        <div class="flex gap-8">
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="Kontak.html">Email</a>
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">GitHub</a>
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">LinkedIn</a>
+        </div>
+    </footer>
+
+    <!-- ===================== MODAL ===================== -->
+    <div id="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <!-- backdrop -->
+        <div class="absolute inset-0" onclick="closeModal()"></div>
+
+        <!-- panel -->
+        <div id="modal-panel">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-8 py-6 border-b border-gray-100 sticky top-0 bg-white z-10">
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400" id="modal-category">—</span>
+                <button onclick="closeModal()" class="flex items-center gap-2 font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors">
+                    <span>Tutup</span>
+                    <span class="material-symbols-outlined text-base">close</span>
+                </button>
+            </div>
+
+            <!-- Gallery -->
+            <div class="relative">
+                <div class="gallery-track" id="modal-gallery"></div>
+
+                <!-- Prev / Next arrows -->
+                <button id="gallery-prev" onclick="galleryNav(-1)"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 border border-gray-200 flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition-all">
+                    <span class="material-symbols-outlined text-base">chevron_left</span>
+                </button>
+                <button id="gallery-next" onclick="galleryNav(1)"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 border border-gray-200 flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition-all">
+                    <span class="material-symbols-outlined text-base">chevron_right</span>
+                </button>
+            </div>
+
+            <!-- Dots + Thumbnails -->
+            <div class="px-8 pt-4 pb-2 flex items-center gap-2" id="modal-dots"></div>
+            <div class="px-8 pb-4 thumb-strip" id="modal-thumbs"></div>
+
+            <!-- Info -->
+            <div class="px-8 pt-6 pb-16">
+                <div class="border-t border-gray-100 pt-8">
+                    <div class="flex justify-between items-start mb-6">
+                        <h2 id="modal-title" style="font-family:'Noto Serif',serif" class="text-3xl font-bold tracking-tight leading-tight max-w-xs"></h2>
+                        <span id="modal-year" style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0 mt-1"></span>
+                    </div>
+                    <p id="modal-stack" class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-6"></p>
+                    <p id="modal-desc" class="text-sm text-zinc-600 leading-relaxed mb-8"></p>
+
+                    <!-- Features list -->
+                    <div id="modal-features-wrap" class="mb-8 hidden">
+                        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-4">Fitur Utama</span>
+                        <ul id="modal-features" class="space-y-2"></ul>
+                    </div>
+
+                    <!-- Role -->
+                    <div id="modal-role-wrap" class="mb-8 hidden">
+                        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-2">Peran</span>
+                        <p id="modal-role" class="text-sm text-zinc-600"></p>
+                    </div>
+
+                    <!-- Link -->
+                    <div id="modal-link-wrap" class="hidden">
+                        <a id="modal-link" href="#" target="_blank"
+                            class="inline-flex items-center gap-2 font-sans text-xs tracking-widest uppercase border border-black px-6 py-3 hover:bg-black hover:text-white transition-all">
+                            <span id="modal-link-label">Buka Website</span>
+                            <span class="material-symbols-outlined text-sm">open_in_new</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ── Intersection Observer ── */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        /* ── Filter ── */
+        function filterProjects(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${category}"]`).classList.add('active');
+            document.querySelectorAll('.project-card').forEach(card => {
+                const cats = card.dataset.category || '';
+                card.style.display = (category === 'all' || cats.includes(category)) ? 'block' : 'none';
+            });
+        }
+
+        /* ── Project Data ── */
+        const projects = {
+            smr: {
+    title: 'Fleet Management System — Sumber Makmur Rafa',
+    year: '2026',
+    category: 'Web Dev · Full-stack',
+    stack: 'Laravel · MySQL · Chart.js · Tailwind CSS · Dashboard',
+    desc: 'Sistem manajemen armada alat berat untuk CV Sumber Makmur Rafa (SMR). Dibangun untuk membantu tim operasional memantau seluruh unit alat berat, jadwal maintenance, data operator, dan transaksi persewaan secara real-time dalam satu dashboard yang terintegrasi.',
+    features: [
+        'Dashboard ringkasan operasional: total unit, unit aktif, dalam maintenance, dan non-aktif',
+        'Grafik aktivitas unit bulanan dengan filter rentang waktu (3 bulan, 6 bulan, 1 tahun, custom)',
+        'Feed aktivitas terkini secara real-time (pergantian operator, maintenance, kerusakan)',
+        'Manajemen unit alat berat: tambah, edit, detail, dan status unit',
+        'Manajemen operator dan jadwal shift',
+        'Pencatatan dan penjadwalan maintenance rutin maupun darurat',
+        'Modul persewaan unit dengan histori transaksi',
+        'Laporan operasional yang dapat diekspor',
+    ],
+    role: 'Full-stack developer — merancang arsitektur sistem, skema database relasional, membangun seluruh modul dari dashboard hingga laporan, serta mengimplementasikan visualisasi data dengan Chart.js.',
+    images: [
+        { src: './img/smsr.png', alt: 'Dashboard Fleet Management System SMR' },
+    ],
+    bg: '#1c1c1e',
+    icon: 'local_shipping',
+    iconColor: '#eab308',
+},
+            pso: {
+                title: 'Sistem Informasi Pariwisata Trenggalek',
+                year: '2026',
+                category: 'Web Dev · Kampus',
+                stack: 'PHP · MySQL · PSO Algorithm · Bootstrap',
+                desc: 'Sistem informasi pariwisata Kabupaten Trenggalek yang membantu wisatawan menemukan destinasi terbaik sesuai preferensi mereka. Inti dari sistem ini adalah algoritma Particle Swarm Optimization (PSO) yang mengoptimalkan rekomendasi destinasi secara cerdas berdasarkan input pengguna.',
+                features: [
+                    'Rekomendasi destinasi berbasis algoritma PSO',
+                    'Peta interaktif lokasi wisata',
+                    'Halaman detail destinasi dengan galeri foto',
+                    'Panel admin untuk manajemen data wisata',
+                    'Filter pencarian berdasarkan kategori dan rating',
+                ],
+                role: 'Full-stack developer — merancang database, mengimplementasikan algoritma PSO, dan membangun antarmuka pengguna.',
+                images: [
+                    { src: './img/PSO.png', alt: 'Halaman utama sistem pariwisata' },
+                    { src: './img/PSO.png', alt: 'Halaman rekomendasi destinasi', caption: 'Hasil rekomendasi PSO' },
+                ],
+                bg: '#f0fdfa',
+                icon: 'travel_explore',
+                iconColor: '#2dd4bf',
+            },
+            polda: {
+                title: 'Sistem Informasi Polda',
+                year: '2024',
+                category: 'Web Dev · Magang',
+                stack: 'Laravel · MySQL · Bootstrap · Backend',
+                desc: 'Sistem manajemen data telekomunikasi kepolisian yang dikembangkan selama program magang. Sistem ini mencakup pengelolaan data Alkom (Alat Komunikasi), Tower, dan Repeater yang tersebar di seluruh wilayah.',
+                features: [
+                    'CRUD data Alkom, Tower, dan Repeater',
+                    'Dashboard ringkasan data telekomunikasi',
+                    'Autentikasi dan manajemen pengguna berbasis role',
+                    'Export laporan ke Excel dan PDF',
+                    'Pencarian dan filter data dinamis',
+                ],
+                role: 'Backend developer — membangun API Laravel, merancang skema database, dan mengimplementasikan sistem autentikasi.',
+                images: [
+                    { src: './img/polda.png', alt: 'Dashboard sistem Polda' },
+                ],
+                bg: '#18181b',
+                icon: 'shield',
+                iconColor: '#52525b',
+            },
+            aniv: {
+                title: 'Anniversary Website',
+                year: '2024',
+                category: 'Web Dev · Personal',
+                stack: 'HTML · CSS · JavaScript · Netlify',
+                desc: 'Website interaktif yang dibuat sebagai hadiah peringatan anniversary. Menggabungkan berbagai elemen personal yang dibuat dengan penuh perhatian — dari galeri foto yang terurut otomatis berdasarkan metadata EXIF hingga animasi karakter kucing yang berjalan mengikuti kursor.',
+                features: [
+                    'Galeri foto otomatis berurutan via metadata EXIF',
+                    'Surat cinta interaktif dengan animasi halaman',
+                    'Karakter kucing pixel art yang berjalan mengikuti kursor',
+                    'Musik latar dengan kontrol pemutaran',
+                    'Countdown anniversary real-time',
+                ],
+                role: 'Sole developer & designer — dari konsep, desain, hingga deploy di Netlify.',
+                link: 'https://malikarzqn12.netlify.app/',
+                linkLabel: 'Buka Website',
+                images: [
+                    { src: './img/aniv.png', alt: 'Halaman utama anniversary' },
+                ],
+                bg: '#fdf2f8',
+                icon: 'favorite',
+                iconColor: '#f9a8d4',
+            },
+            kafe: {
+                title: 'Kafe Web',
+                year: '2023',
+                category: 'Web Dev · Kampus',
+                stack: 'HTML · CSS · JavaScript',
+                desc: 'Website multi-halaman untuk kafe sebagai proyek mata kuliah pemrograman web. Menampilkan daftar coffee shop pilihan, detail menu lengkap, halaman tentang, dan formulir kontak — semuanya dengan layout responsif yang bisa diakses dari berbagai ukuran layar.',
+                features: [
+                    'Halaman daftar menu dengan kategori (kopi, non-kopi, makanan)',
+                    'Detail menu dengan deskripsi dan harga',
+                    'Layout responsif mobile-first',
+                    'Navigasi multi-halaman tanpa framework',
+                    'Formulir kontak dan lokasi kafe',
+                ],
+                role: 'Developer & designer — membuat seluruh halaman dari nol menggunakan HTML, CSS, dan vanilla JavaScript.',
+                images: [
+                    { src: './img/cafe.png', alt: 'Halaman beranda kafe' },
+                ],
+                bg: '#fffbeb',
+                icon: 'local_cafe',
+                iconColor: '#fcd34d',
+            },
+            mahas: {
+                title: 'Sistem Data Mahasiswa',
+                year: '2023',
+                category: 'Web Dev · Kampus',
+                stack: 'PHP · MySQL · CRUD · Native',
+                desc: 'Aplikasi web sederhana untuk manajemen data mahasiswa sebagai tugas akhir mata kuliah pemrograman berbasis web. Menerapkan operasi CRUD lengkap dengan sistem autentikasi pengguna menggunakan PHP native tanpa framework.',
+                features: [
+                    'Create, Read, Update, Delete data mahasiswa',
+                    'Login dan registrasi pengguna',
+                    'Tabel data dengan pagination',
+                    'Validasi form sisi server',
+                    'Pencarian data berdasarkan nama atau NIM',
+                ],
+                role: 'Full-stack developer — merancang database MySQL dan membangun seluruh aplikasi dengan PHP native.',
+                images: [
+                    { src: './img/mahas.png', alt: 'Halaman daftar mahasiswa' },
+                ],
+                bg: '#eff6ff',
+                icon: 'school',
+                iconColor: '#93c5fd',
+            },
+            potato: {
+                title: 'Deteksi Penyakit Daun Kentang',
+                year: '2024',
+                category: 'Web Dev · Deep Learning · Kampus',
+                stack: 'Python · TensorFlow · Flask · Deep Learning · CNN',
+                desc: 'Aplikasi web berbasis deep learning yang membantu petani mendeteksi penyakit pada daun kentang secara cepat dan akurat. Petani cukup mengunggah foto daun melalui antarmuka web, dan sistem akan menganalisis serta memberikan diagnosis beserta rekomendasi penanganan.',
+                features: [
+                    'Upload foto daun langsung dari ponsel',
+                    'Klasifikasi penyakit: Early Blight, Late Blight, Healthy',
+                    'Model CNN dengan akurasi >95% pada dataset PlantVillage',
+                    'Rekomendasi penanganan per jenis penyakit',
+                    'Antarmuka sederhana yang ramah petani',
+                ],
+                role: 'ML Engineer & Backend — melatih model CNN dengan TensorFlow dan mengintegrasikan model ke antarmuka web Flask.',
+                images: [
+                    { src: './img/potato.jpg', alt: 'Antarmuka deteksi penyakit daun' },
+                ],
+                bg: '#f0fdf4',
+                icon: 'yard',
+                iconColor: '#4ade80',
+            },
+            ilus2: {
+                title: 'Ilustrasi Karakter Original',
+                year: '2023–2024',
+                category: 'Ilustrasi · Character Design',
+                stack: 'Ilustrasi Digital · Character Design · Community Art',
+                desc: 'Koleksi karakter orisinal yang dirancang dan diilustrasikan secara digital untuk komunitas server online. Setiap karakter memiliki kepribadian, lore, dan gaya visual yang unik — dikerjakan sebagai ilustrator aktif komunitas.',
+                features: [
+                    'Desain karakter dengan lore dan backstory',
+                    'Berbagai gaya: semi-realis, chibi, dan stylized',
+                    'Ekspresi dan pose sheet karakter',
+                    'Karakter untuk kebutuhan roleplay komunitas',
+                ],
+                role: 'Ilustrator — membuat konsep, sketsa, line art, hingga coloring seluruh karakter.',
+                images: [
+                    { src: './img/ilus2.png', alt: 'Ilustrasi karakter original' },
+                ],
+                bg: '#f5f3ff',
+                icon: 'palette',
+                iconColor: '#c4b5fd',
+            },
+            ilus: {
+                title: 'Komisi Karakter',
+                year: '2023–2024',
+                category: 'Ilustrasi · Commission Work',
+                stack: 'Ilustrasi Digital · Komisi · Custom Art',
+                desc: 'Koleksi karya komisi ilustrasi karakter yang dikerjakan untuk klien dari komunitas online. Setiap karya dikerjakan sesuai referensi dan visi klien — mulai dari deskripsi karakter, palet warna, hingga pose dan ekspresi yang diinginkan.',
+                features: [
+                    'Full-body dan half-body character art',
+                    'Proses revisi terbuka sesuai feedback klien',
+                    'Referensi warna dan mood board sebelum pengerjaan',
+                    'Berbagai gaya sesuai permintaan klien',
+                ],
+                role: 'Komisioner ilustrator — komunikasi langsung dengan klien, sketsa preview, hingga file final beresolusi tinggi.',
+                images: [
+                    { src: './img/ilus.png', alt: 'Contoh hasil komisi karakter' },
+                ],
+                bg: '#ecfdf5',
+                icon: 'brush',
+                iconColor: '#6ee7b7',
+            },
+        };
+
+        /* ── Gallery state ── */
+        let currentIndex = 0;
+        let currentImages = [];
+
+        function buildGallery(images, bg, icon, iconColor) {
+            const track = document.getElementById('modal-gallery');
+            const dots  = document.getElementById('modal-dots');
+            const thumbs = document.getElementById('modal-thumbs');
+
+            track.innerHTML = '';
+            dots.innerHTML  = '';
+            thumbs.innerHTML = '';
+            currentImages = images;
+            currentIndex  = 0;
+
+            images.forEach((img, i) => {
+                // Main slide
+                const slide = document.createElement('div');
+                slide.className = 'gallery-item';
+                slide.style.background = bg;
+
+                const el = document.createElement('img');
+                el.src = img.src;
+                el.alt = img.alt;
+                el.onerror = function() {
+                    this.style.display = 'none';
+                    const ph = document.createElement('div');
+                    ph.className = 'gallery-placeholder';
+                    ph.style.background = bg;
+                    ph.innerHTML = `<span class="material-symbols-outlined" style="font-size:64px;color:${iconColor}">${icon}</span>`;
+                    slide.appendChild(ph);
+                };
+                slide.appendChild(el);
+                track.appendChild(slide);
+
+                // Dot
+                const dot = document.createElement('button');
+                dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goToSlide(i);
+                dots.appendChild(dot);
+
+                // Thumb
+                const thumb = document.createElement('div');
+                thumb.className = 'thumb-item' + (i === 0 ? ' active' : '');
+                thumb.onclick = () => goToSlide(i);
+                const tImg = document.createElement('img');
+                tImg.src = img.src;
+                tImg.alt = img.alt;
+                tImg.onerror = function() {
+                    this.style.display = 'none';
+                    const ph = document.createElement('div');
+                    ph.className = 'thumb-placeholder';
+                    ph.style.background = bg;
+                    ph.innerHTML = `<span class="material-symbols-outlined" style="color:${iconColor}">${icon}</span>`;
+                    thumb.appendChild(ph);
+                };
+                thumb.appendChild(tImg);
+                thumbs.appendChild(thumb);
+            });
+
+            // Hide arrows if single image
+            const hasSingle = images.length <= 1;
+            document.getElementById('gallery-prev').style.display = hasSingle ? 'none' : 'flex';
+            document.getElementById('gallery-next').style.display = hasSingle ? 'none' : 'flex';
+            dots.style.display = hasSingle ? 'none' : 'flex';
+            thumbs.style.display = hasSingle ? 'none' : 'flex';
+        }
+
+        function goToSlide(index) {
+            const track  = document.getElementById('modal-gallery');
+            const slides = track.querySelectorAll('.gallery-item');
+            currentIndex = Math.max(0, Math.min(index, slides.length - 1));
+            slides[currentIndex].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+
+            document.querySelectorAll('.gallery-dot').forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+            document.querySelectorAll('.thumb-item').forEach((t, i) => t.classList.toggle('active', i === currentIndex));
+        }
+
+        function galleryNav(dir) {
+            goToSlide(currentIndex + dir);
+        }
+
+        /* ── Open / Close Modal ── */
+        function openModal(id) {
+            const p = projects[id];
+            if (!p) return;
+
+            // Populate text
+            document.getElementById('modal-category').textContent = p.category;
+            document.getElementById('modal-title').textContent    = p.title;
+            document.getElementById('modal-year').textContent     = p.year;
+            document.getElementById('modal-stack').textContent    = p.stack;
+            document.getElementById('modal-desc').textContent     = p.desc;
+
+            // Features
+            const fw = document.getElementById('modal-features-wrap');
+            const fl = document.getElementById('modal-features');
+            if (p.features && p.features.length) {
+                fl.innerHTML = p.features.map(f =>
+                    `<li class="flex items-start gap-2 text-sm text-zinc-600">
+                        <span class="material-symbols-outlined text-sm mt-0.5 shrink-0" style="font-size:16px">arrow_forward</span>
+                        <span>${f}</span>
+                    </li>`
+                ).join('');
+                fw.classList.remove('hidden');
+            } else {
+                fw.classList.add('hidden');
+            }
+
+            // Role
+            const rw = document.getElementById('modal-role-wrap');
+            if (p.role) {
+                document.getElementById('modal-role').textContent = p.role;
+                rw.classList.remove('hidden');
+            } else {
+                rw.classList.add('hidden');
+            }
+
+            // Link
+            const lw = document.getElementById('modal-link-wrap');
+            if (p.link) {
+                document.getElementById('modal-link').href = p.link;
+                document.getElementById('modal-link-label').textContent = p.linkLabel || 'Buka Website';
+                lw.classList.remove('hidden');
+            } else {
+                lw.classList.add('hidden');
+            }
+
+            // Gallery
+            buildGallery(p.images, p.bg, p.icon, p.iconColor);
+
+            // Scroll panel to top
+            document.getElementById('modal-panel').scrollTop = 0;
+
+            // Open
+            const modal = document.getElementById('project-modal');
+            modal.style.display = 'flex';
+            requestAnimationFrame(() => modal.classList.add('open'));
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('project-modal');
+            modal.classList.remove('open');
+            setTimeout(() => { modal.style.display = 'none'; }, 400);
+            document.body.style.overflow = '';
+        }
+
+        // Close on Escape
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>

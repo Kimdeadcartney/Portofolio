@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Tentang — Abdul Hakim Nur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      <style>
+        body { background-color: #f9f9f9; font-family: 'Noto Serif', serif; }
+        .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .skill-bar { background: #e5e7eb; height: 2px; }
+        .skill-fill { background: #000; height: 2px; transition: width 1.2s ease; width: 0; }
+    </style>
+    </style>
+</head>
+<body class="selection:bg-black selection:text-white">
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
+        <div class="flex justify-between items-center px-8 md:px-12 py-6 max-w-screen-2xl mx-auto">
+            <a href="Home.html" style="font-family:'Noto Serif',serif" class="text-xl font-bold tracking-tighter text-black">Abdul Hakim Nur</a>
+            <div class="hidden md:flex items-center space-x-10">
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Home.html">Beranda</a>
+                <a class="text-black font-bold border-b border-black pb-0.5 text-sm" href="About.html">Tentang</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Portofolio.html">Portofolio</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Pengalaman.html">Pengalaman</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Kontak.html">Kontak</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-40">
+
+        <!-- Hero nama -->
+        <section class="max-w-screen-2xl mx-auto px-8 mb-32 fade-up">
+            <div class="border-t border-gray-200 pt-12">
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-8">Tentang</span>
+                <h1 style="font-family:'Noto Serif',serif" class="text-7xl md:text-9xl font-normal tracking-tighter leading-none mb-0">
+                    Abdul Hakim Nur
+                </h1>
+            </div>
+        </section>
+
+    <!-- Foto + Bio -->
+<section class="max-w-screen-2xl mx-auto px-8 mb-40 fade-up">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-16">
+        <!-- Foto -->
+        <div class="md:col-span-4">
+            <div class="aspect-[3/4] bg-zinc-100 flex items-center justify-center relative overflow-hidden">
+                <img 
+                    src="./img/me.jpeg" 
+                    alt="Abdul Hakim Nur"
+                    class="w-full h-full object-cover object-center"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                />
+                <!-- Fallback kalau foto tidak ditemukan -->
+                <div class="text-center absolute inset-0 items-center justify-center hidden flex-col bg-zinc-100">
+                    <span class="material-symbols-outlined text-7xl text-zinc-300 block mb-4">person</span>
+                    <span class="font-sans text-xs tracking-widest uppercase text-zinc-300">Foto akan hadir</span>
+                </div>
+               
+            </div>
+            <div class="mt-6 space-y-2">
+                <p class="font-sans text-xs tracking-widest uppercase text-zinc-400">Abdul Hakim Nur</p>
+                <p style="font-family:'Noto Serif',serif" class="italic text-zinc-500">Mahasiswa Informatika & Ilustrator</p>
+            </div>
+        </div>
+                <!-- Bio -->
+                <div class="md:col-span-7 md:col-start-6">
+                    <p class="text-2xl leading-relaxed text-zinc-800 mb-10">
+                        Saya adalah mahasiswa Informatika yang berfokus pada pengembangan web dan ilustrasi digital. Dua dunia yang kelihatannya berbeda, tapi bagi saya saling melengkapi — logika dan estetika.
+                    </p>
+                    <p class="text-lg leading-relaxed text-zinc-500 mb-10">
+                        Di sisi teknis, saya terbiasa membangun sistem berbasis PHP dan Laravel, bekerja dengan database MySQL, dan menyelesaikan proyek dari tahap wireframe di Figma sampai deployment. Saya pernah terlibat dalam proyek backend untuk institusi resmi — pengalaman yang mengajarkan pentingnya sistem yang andal dan terstruktur.
+                    </p>
+                    <p class="text-lg leading-relaxed text-zinc-500 mb-16">
+                        Di sisi kreatif, saya mengerjakan ilustrasi karakter digital — mulai dari desain orisinal hingga komisi dari komunitas online. Setiap karya adalah latihan presisi: garis yang tepat, proporsi yang matang, ekspresi yang berbicara.
+                    </p>
+                    <div class="flex gap-6">
+                        <a href="Kontak.html" class="bg-black text-white px-10 py-4 text-xs font-sans tracking-widest uppercase hover:bg-zinc-800 transition-all">Hubungi Saya →</a>
+                        <a href="Portofolio.html" class="border border-black text-black px-10 py-4 text-xs font-sans tracking-widest uppercase hover:bg-black hover:text-white transition-all">Lihat Karya</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section class="max-w-screen-2xl mx-auto px-8 mb-40 fade-up">
+            <div class="border-t border-gray-200 pt-12 mb-16">
+                <h2 style="font-family:'Noto Serif',serif" class="text-4xl tracking-tighter">Keahlian</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-10">
+                <div class="skill-item">
+                    <div class="flex justify-between mb-3">
+                        <span class="font-sans text-xs tracking-widest uppercase">HTML & CSS</span>
+                        <span class="font-sans text-xs text-zinc-400">90%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="flex justify-between mb-3">
+                        <span class="font-sans text-xs tracking-widest uppercase">PHP & Laravel</span>
+                        <span class="font-sans text-xs text-zinc-400">75%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" data-width="75"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="flex justify-between mb-3">
+                        <span class="font-sans text-xs tracking-widest uppercase">MySQL & Database</span>
+                        <span class="font-sans text-xs text-zinc-400">75%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" data-width="75"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="flex justify-between mb-3">
+                        <span class="font-sans text-xs tracking-widest uppercase">JavaScript</span>
+                        <span class="font-sans text-xs text-zinc-400">60%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" data-width="60"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="flex justify-between mb-3">
+                        <span class="font-sans text-xs tracking-widest uppercase">Figma & UI Design</span>
+                        <span class="font-sans text-xs text-zinc-400">70%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" data-width="70"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="flex justify-between mb-3">
+                        <span class="font-sans text-xs tracking-widest uppercase">Ilustrasi Digital</span>
+                        <span class="font-sans text-xs text-zinc-400">85%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="flex justify-between mb-3">
+                        <span class="font-sans text-xs tracking-widest uppercase">Git & Version Control</span>
+                        <span class="font-sans text-xs text-zinc-400">65%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" data-width="65"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="flex justify-between mb-3">
+                        <span class="font-sans text-xs tracking-widest uppercase">Tailwind CSS</span>
+                        <span class="font-sans text-xs text-zinc-400">80%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fakta singkat -->
+        <section class="max-w-screen-2xl mx-auto px-8 fade-up">
+            <div class="border-t border-gray-200 pt-12 grid grid-cols-2 md:grid-cols-4 gap-12">
+                <div>
+                    <p style="font-family:'Noto Serif',serif" class="text-5xl font-bold tracking-tighter mb-2">4+</p>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400">Proyek Selesai</p>
+                </div>
+                <div>
+                    <p style="font-family:'Noto Serif',serif" class="text-5xl font-bold tracking-tighter mb-2">2+</p>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400">Tahun Coding</p>
+                </div>
+                <div>
+                    <p style="font-family:'Noto Serif',serif" class="text-5xl font-bold tracking-tighter mb-2">1</p>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400">Pengalaman Magang</p>
+                </div>
+                <div>
+                    <p style="font-family:'Noto Serif',serif" class="text-5xl font-bold tracking-tighter mb-2">∞</p>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400">Semangat Belajar</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-gray-200 py-12 flex flex-col md:flex-row justify-between items-center px-8 max-w-screen-2xl mx-auto">
+        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-4 md:mb-0">© 2026 Abdul Hakim Nur</span>
+        <div class="flex gap-8">
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="Kontak.html">Email</a>
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">GitHub</a>
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">LinkedIn</a>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Animate skill bars
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.querySelectorAll('.skill-fill').forEach(bar => {
+                        bar.style.width = bar.dataset.width + '%';
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('.fade-up').forEach(el => skillObserver.observe(el));
+    </script>
+</body>
+</html>

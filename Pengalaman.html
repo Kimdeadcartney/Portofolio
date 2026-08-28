@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Pengalaman — Abdul Hakim Nur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f9f9f9; font-family: 'Noto Serif', serif; }
+        .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .timeline-line { position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: #e5e7eb; }
+        .timeline-dot { position: absolute; left: -4px; top: 8px; width: 9px; height: 9px; border-radius: 50%; background: #000; }
+    </style>
+</head>
+<body class="selection:bg-black selection:text-white">
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
+        <div class="flex justify-between items-center px-8 md:px-12 py-6 max-w-screen-2xl mx-auto">
+            <a href="Home.html" style="font-family:'Noto Serif',serif" class="text-xl font-bold tracking-tighter text-black">Abdul Hakim Nur</a>
+            <div class="hidden md:flex items-center space-x-10">
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Home.html">Beranda</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="About.html">Tentang</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Portofolio.html">Portofolio</a>
+                <a class="text-black font-bold border-b border-black pb-0.5 text-sm" href="Pengalaman.html">Pengalaman</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Kontak.html">Kontak</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-40">
+        <!-- Header -->
+        <section class="max-w-screen-2xl mx-auto px-8 mb-32 fade-up">
+            <div class="border-t border-gray-200 pt-12">
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-8">Pengalaman</span>
+                <h1 style="font-family:'Noto Serif',serif" class="text-6xl md:text-8xl font-normal tracking-tighter">Perjalanan & Pengalaman</h1>
+            </div>
+        </section>
+
+        <div class="max-w-screen-2xl mx-auto px-8 grid grid-cols-1 md:grid-cols-12 gap-24">
+
+            <!-- Kolom Kiri: Kerja & Magang -->
+            <div class="md:col-span-7">
+                <h2 style="font-family:'Noto Serif',serif" class="text-3xl tracking-tighter border-t border-gray-200 pt-8 mb-16 fade-up">Pengalaman Kerja & Magang</h2>
+
+                <!-- Timeline -->
+                <div class="relative pl-10 fade-up">
+                    <div class="timeline-line"></div>
+
+                    <!-- Entry 1: Magang Polda -->
+                    <div class="relative mb-20">
+                        <div class="timeline-dot"></div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-2 mb-4">
+                            <div>
+                                <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Web Developer — Magang</h3>
+                                <p class="font-sans text-sm text-zinc-500 mt-1">Kepolisian Daerah (Polda)</p>
+                            </div>
+                            <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 whitespace-nowrap">2024</span>
+                        </div>
+                        <p class="text-zinc-600 leading-relaxed mb-4">Mengembangkan sistem informasi backend untuk pengelolaan data telekomunikasi kepolisian. Sistem mencakup manajemen data Alkom, Tower, dan Repeater beserta autentikasi pengguna.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">Laravel</span>
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">MySQL</span>
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">PHP</span>
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">Blade</span>
+                        </div>
+                    </div>
+
+                    <!-- Entry 2: Ilustrator komunitas -->
+                    <div class="relative mb-20">
+                        <div class="timeline-dot"></div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-2 mb-4">
+                            <div>
+                                <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Ilustrator Digital</h3>
+                                <p class="font-sans text-sm text-zinc-500 mt-1">Komunitas Server Online</p>
+                            </div>
+                            <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 whitespace-nowrap">2023 — Sekarang</span>
+                        </div>
+                        <p class="text-zinc-600 leading-relaxed mb-4">Aktif sebagai ilustrator di komunitas online — mengerjakan karya orisinal maupun komisi karakter dari anggota komunitas. Spesialisasi dalam character design dengan pendekatan yang detail dan ekspresif.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">Character Design</span>
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">Ilustrasi Digital</span>
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">Komisi</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Proyek Kampus -->
+                <h2 style="font-family:'Noto Serif',serif" class="text-3xl tracking-tighter border-t border-gray-200 pt-8 mb-16 mt-16 fade-up">Proyek Kampus</h2>
+                <div class="relative pl-10 fade-up">
+                    <div class="timeline-line"></div>
+
+                    <div class="relative mb-16">
+                        <div class="timeline-dot"></div>
+                        <div class="flex justify-between items-start gap-2 mb-4">
+                            <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Sistem Data Mahasiswa (CRUD)</h3>
+                            <span class="font-sans text-xs tracking-widest uppercase text-zinc-400">2023</span>
+                        </div>
+                        <p class="text-zinc-600 leading-relaxed mb-4">Aplikasi manajemen data mahasiswa berbasis PHP native dan MySQL — mencakup fitur CRUD lengkap, autentikasi login, dan registrasi pengguna.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">PHP</span>
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">MySQL</span>
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">HTML/CSS</span>
+                        </div>
+                    </div>
+
+                    <div class="relative mb-16">
+                        <div class="timeline-dot"></div>
+                        <div class="flex justify-between items-start gap-2 mb-4">
+                            <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Kafe Web — Website Kafe</h3>
+                            <span class="font-sans text-xs tracking-widest uppercase text-zinc-400">2023</span>
+                        </div>
+                        <p class="text-zinc-600 leading-relaxed mb-4">Website multi-halaman untuk kafe dengan tampilan responsif — mencakup halaman home, daftar kafe, detail coffee shop, about, dan kontak.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">HTML</span>
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">CSS</span>
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">JavaScript</span>
+                        </div>
+                    </div>
+
+                    <div class="relative mb-16">
+                        <div class="timeline-dot"></div>
+                        <div class="flex justify-between items-start gap-2 mb-4">
+                            <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">Anniversary Website</h3>
+                            <span class="font-sans text-xs tracking-widest uppercase text-zinc-400">2024</span>
+                        </div>
+                        <p class="text-zinc-600 leading-relaxed mb-4">Proyek pribadi — website interaktif dengan galeri foto EXIF-aware, surat cinta, animasi SVG, dan musik latar. Deployed di Netlify.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">HTML/CSS/JS</span>
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">Tailwind</span>
+                            <span class="font-sans text-xs tracking-widest uppercase px-3 py-1 bg-zinc-100 text-zinc-500">Netlify</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan: Tools & Pendidikan -->
+            <div class="md:col-span-4 md:col-start-9">
+                <div class="border-t border-gray-200 pt-8 mb-16 fade-up sticky top-32">
+                    <h2 style="font-family:'Noto Serif',serif" class="text-2xl tracking-tighter mb-10">Tools & Teknologi</h2>
+                    <div class="space-y-3 mb-16">
+                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                            <span class="font-sans text-xs tracking-widest uppercase">Laravel</span>
+                            <span class="font-sans text-xs text-zinc-400">Backend</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                            <span class="font-sans text-xs tracking-widest uppercase">PHP</span>
+                            <span class="font-sans text-xs text-zinc-400">Backend</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                            <span class="font-sans text-xs tracking-widest uppercase">MySQL</span>
+                            <span class="font-sans text-xs text-zinc-400">Database</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                            <span class="font-sans text-xs tracking-widest uppercase">HTML & CSS</span>
+                            <span class="font-sans text-xs text-zinc-400">Frontend</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                            <span class="font-sans text-xs tracking-widest uppercase">Tailwind CSS</span>
+                            <span class="font-sans text-xs text-zinc-400">Frontend</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                            <span class="font-sans text-xs tracking-widest uppercase">JavaScript</span>
+                            <span class="font-sans text-xs text-zinc-400">Frontend</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                            <span class="font-sans text-xs tracking-widest uppercase">Figma</span>
+                            <span class="font-sans text-xs text-zinc-400">Design</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                            <span class="font-sans text-xs tracking-widest uppercase">Git & GitHub</span>
+                            <span class="font-sans text-xs text-zinc-400">Version Control</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                            <span class="font-sans text-xs tracking-widest uppercase">Procreate / CSP</span>
+                            <span class="font-sans text-xs text-zinc-400">Ilustrasi</span>
+                        </div>
+                    </div>
+
+                    <h2 style="font-family:'Noto Serif',serif" class="text-2xl tracking-tighter mb-10 border-t border-gray-200 pt-8">Pendidikan</h2>
+                    <div>
+                        <p style="font-family:'Noto Serif',serif" class="text-lg font-bold mb-1">S1 Informatika</p>
+                        <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-3">Aktif</p>
+                        <p class="text-sm text-zinc-500 leading-relaxed">Mempelajari dasar-dasar ilmu komputer, rekayasa perangkat lunak, basis data, dan pengembangan sistem informasi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-200 py-12 flex flex-col md:flex-row justify-between items-center px-8 max-w-screen-2xl mx-auto">
+        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-4 md:mb-0">© 2026 Abdul Hakim Nur</span>
+        <div class="flex gap-8">
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="Kontak.html">Email</a>
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">GitHub</a>
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">LinkedIn</a>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

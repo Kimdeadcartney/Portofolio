@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Kontak — Abdul Hakim Nur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f9f9f9; font-family: 'Noto Serif', serif; }
+        .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        input, textarea { outline: none; background: transparent; border: none; border-bottom: 1px solid #e5e7eb; width: 100%; padding: 12px 0; font-family: 'Noto Serif', serif; font-size: 1rem; transition: border-color 0.3s; }
+        input:focus, textarea:focus { border-bottom-color: #000; }
+        input::placeholder, textarea::placeholder { color: #a1a1aa; font-style: italic; }
+        textarea { resize: none; min-height: 120px; }
+    </style>
+</head>
+<body class="selection:bg-black selection:text-white">
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
+        <div class="flex justify-between items-center px-8 md:px-12 py-6 max-w-screen-2xl mx-auto">
+            <a href="Home.html" style="font-family:'Noto Serif',serif" class="text-xl font-bold tracking-tighter text-black">Abdul Hakim Nur</a>
+            <div class="hidden md:flex items-center space-x-10">
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Home.html">Beranda</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="About.html">Tentang</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Portofolio.html">Portofolio</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Pengalaman.html">Pengalaman</a>
+                <a class="text-black font-bold border-b border-black pb-0.5 text-sm" href="Kontak.html">Kontak</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-40">
+        <!-- Header -->
+        <section class="max-w-screen-2xl mx-auto px-8 mb-32 fade-up">
+            <div class="border-t border-gray-200 pt-12">
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-8">Kontak</span>
+                <h1 style="font-family:'Noto Serif',serif" class="text-6xl md:text-8xl font-normal tracking-tighter leading-none mb-8">Mari Berkolaborasi</h1>
+                <p class="text-xl text-zinc-500 max-w-xl leading-relaxed">Terbuka untuk diskusi proyek, kolaborasi kreatif, atau sekadar ngobrol soal web dan ilustrasi.</p>
+            </div>
+        </section>
+
+        <div class="max-w-screen-2xl mx-auto px-8 grid grid-cols-1 md:grid-cols-12 gap-24">
+
+            <!-- Kontak Langsung -->
+            <div class="md:col-span-4 fade-up">
+                <div class="border-t border-gray-200 pt-8 mb-12">
+                    <h2 style="font-family:'Noto Serif',serif" class="text-2xl tracking-tighter mb-10">Kontak Langsung</h2>
+                    <div class="space-y-8">
+                        <div>
+                            <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-2">Email</span>
+                            <a href="mailto:kimdeadcartney@email.com" style="font-family:'Noto Serif',serif" class="text-lg hover:text-zinc-500 transition-colors border-b border-black pb-0.5">kimdeadcartney@gmail.com</a>
+                        </div>
+                        <div>
+                            <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-2">WhatsApp</span>
+                            <a href="https://wa.me/6285608969926" style="font-family:'Noto Serif',serif" class="text-lg hover:text-zinc-500 transition-colors border-b border-black pb-0.5">+62 856-0896-9926</a>
+                        </div>
+                        <div>
+                            <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-2">Lokasi</span>
+                            <p style="font-family:'Noto Serif',serif" class="text-lg italic text-zinc-500">Surabaya, Indonesia</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-200 pt-8">
+                    <h2 style="font-family:'Noto Serif',serif" class="text-2xl tracking-tighter mb-10">Temukan Saya</h2>
+                    <div class="space-y-4">
+                        <a href="#" class="flex justify-between items-center py-3 border-b border-gray-100 hover:border-black transition-colors group">
+                            <span class="font-sans text-xs tracking-widest uppercase">GitHub</span>
+                            <span class="font-sans text-xs text-zinc-400 group-hover:text-black transition-colors">↗</span>
+                        </a>
+                        <a href="#" class="flex justify-between items-center py-3 border-b border-gray-100 hover:border-black transition-colors group">
+                            <span class="font-sans text-xs tracking-widest uppercase">LinkedIn</span>
+                            <span class="font-sans text-xs text-zinc-400 group-hover:text-black transition-colors">↗</span>
+                        </a>
+    
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div class="md:col-span-7 md:col-start-6 fade-up">
+                <div class="border-t border-gray-200 pt-8">
+                    <h2 style="font-family:'Noto Serif',serif" class="text-2xl tracking-tighter mb-12">Kirim Pesan</h2>
+                    <form id="contact-form" class="space-y-12">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div>
+                                <label class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-4">Nama</label>
+                                <input type="text" placeholder="Nama kamu..." />
+                            </div>
+                            <div>
+                                <label class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-4">Email</label>
+                                <input type="email" placeholder="email@kamu.com" />
+                            </div>
+                        </div>
+                        <div>
+                            <label class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-4">Keperluan</label>
+                            <div class="flex flex-wrap gap-3 mb-6">
+                                <button type="button" onclick="selectTopic(this)" class="topic-btn font-sans text-xs tracking-widest uppercase px-5 py-2 border border-gray-200 hover:border-black transition-all">Proyek Web</button>
+                                <button type="button" onclick="selectTopic(this)" class="topic-btn font-sans text-xs tracking-widest uppercase px-5 py-2 border border-gray-200 hover:border-black transition-all">Komisi Ilustrasi</button>
+                                <button type="button" onclick="selectTopic(this)" class="topic-btn font-sans text-xs tracking-widest uppercase px-5 py-2 border border-gray-200 hover:border-black transition-all">Kolaborasi</button>
+                                <button type="button" onclick="selectTopic(this)" class="topic-btn font-sans text-xs tracking-widest uppercase px-5 py-2 border border-gray-200 hover:border-black transition-all">Lainnya</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-4">Pesan</label>
+                            <textarea placeholder="Ceritakan proyekmu atau apa yang ingin kamu diskusikan..."></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="bg-black text-white px-12 py-5 text-xs font-sans tracking-widest uppercase hover:bg-zinc-800 transition-all w-full md:w-auto">
+                                Kirim Pesan →
+                            </button>
+                            <p id="form-msg" class="hidden font-sans text-xs tracking-widest uppercase text-zinc-400 mt-4">Terima kasih! Pesan kamu sudah terkirim. Saya akan segera membalas.</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-200 py-12 flex flex-col md:flex-row justify-between items-center px-8 max-w-screen-2xl mx-auto">
+        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-4 md:mb-0">© 2026 Abdul Hakim Nur</span>
+        <div class="flex gap-8">
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="Kontak.html">Email</a>
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">GitHub</a>
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">LinkedIn</a>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        function selectTopic(btn) {
+            document.querySelectorAll('.topic-btn').forEach(b => {
+                b.style.background = '';
+                b.style.color = '';
+            });
+            btn.style.background = '#000';
+            btn.style.color = '#fff';
+        }
+
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('form-msg').classList.remove('hidden');
+            this.reset();
+            document.querySelectorAll('.topic-btn').forEach(b => { b.style.background = ''; b.style.color = ''; });
+        });
+    </script>
+</body>
+</html>
