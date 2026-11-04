@@ -199,6 +199,28 @@
         <section class="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 fade-up">
             <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12">
 
+                <!-- SnapCraft Photobooth -->
+                <div class="project-card cursor-pointer group" data-category="web" onclick="openModal('snapcraft')">
+                    <div class="aspect-video overflow-hidden mb-4 sm:mb-6 relative bg-rose-50">
+                        <img src="./img/snapcraft.png" alt="SnapCraft — Aesthetic Korean Photobooth"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onerror="this.style.display='none'"/>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/80">
+                            <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-6 py-3">Lihat Detail</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-2 sm:mb-3">
+                        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">SnapCraft — Aesthetic Photobooth Studio</h3>
+                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0">2026</span>
+                    </div>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-2 sm:mb-3">Webcam API · Canvas · CSS Filters · Web App</p>
+                    <p class="text-sm text-zinc-500 leading-relaxed mb-3">Aplikasi photobooth webcam ala Korea (Life4Cuts) dengan 8 filter aesthetic, hitung mundur auto-burst 4 jepretan, stiker lucu interaktif, dan ekspor foto strip PNG.</p>
+                    <div class="flex items-center gap-1 font-sans text-[11px] uppercase tracking-widest text-zinc-400 group-hover:text-black transition-colors">
+                        <span>Lihat Detail</span>
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </div>
+                </div>
+
                 <!-- 0. PaletCraft Studio -->
                 <div class="project-card cursor-pointer group" data-category="web" onclick="openModal('paletcraft')">
                     <div class="aspect-video overflow-hidden mb-4 sm:mb-6 relative bg-zinc-900">
@@ -542,6 +564,31 @@
 
         /* ── Project Data ── */
         const projects = {
+            snapcraft: {
+                title: 'SnapCraft — Aesthetic Korean Photobooth Studio',
+                year: '2026',
+                category: 'Web Dev · Interactive Web App',
+                stack: 'MediaDevices API (Webcam) · HTML5 Canvas · Web Audio API · Tailwind CSS',
+                desc: 'Aplikasi photobooth webcam interaktif yang terinspirasi dari tren self-photo studio Korea (Life4Cuts / Haru Film). Memungkinkan pengguna mengambil foto secara langsung melalui kamera laptop/ponsel dengan filter estetis, menyusun strip foto otomatis, menghias dengan stiker interaktif, dan mengunduh hasil foto beresolusi tinggi.',
+                features: [
+                    'Integrasi kamera webcam langsung (MediaDevices getUserMedia) dengan dukungan kamera depan/belakang serta opsi unggah foto galeri',
+                    '8 filter foto aesthetic real-time: Tokyo Blue (Haru Film), 90s Retro Film, Noir Classic B&W, Golden Cozy, Dreamy Pastel, Cyber Y2K, Vintage Grain, dan Natural',
+                    'Fitur Auto 4-Burst Countdown Timer (3s / 5s) otomatis mengambil 4 foto berurutan lengkap dengan efek flash visual dan audio shutter',
+                    '3 pilihan tata letak foto strip: Classic Korean 4-Cut Strip, 2x2 Quad Grid, dan Vintage Polaroid Card',
+                    'Koleksi stiker lucu (ribbon, sparkles, cat ears, hearts, stars) yang bisa digeser (drag & drop) bebas di atas kanvas',
+                    'Pilihan warna bingkai pastel (Pink, Baby Blue, Matcha, White, Black, Lavender, dll.) serta kustomisasi teks caption dan tanggal',
+                    'Render kanvas resolusi tinggi dengan ekspor instan format PNG tanpa watermark berlebih',
+                ],
+                role: 'Full-stack Creative Developer — merancang arsitektur sistem pengolahan video stream ke kanvas, filter grafis real-time, interaksi drag-and-drop stiker, dan antarmuka pengguna responsif ramah sentuhan (touch-friendly).',
+                link: 'SnapCraft.html',
+                linkLabel: 'Buka Photobooth Studio',
+                images: [
+                    { src: './img/snapcraft.png', alt: 'SnapCraft Photobooth Studio Interface' },
+                ],
+                bg: '#fff1f2',
+                icon: 'photo_camera',
+                iconColor: '#f43f5e',
+            },
             paletcraft: {
                 title: 'PaletCraft — Smart Palette & Contrast Studio',
                 year: '2026',
