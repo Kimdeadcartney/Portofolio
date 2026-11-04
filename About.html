@@ -8,91 +8,132 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      <style>
-        body { background-color: #f9f9f9; font-family: 'Noto Serif', serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: #f9f9f9; font-family: 'Noto Serif', serif; overflow-x: hidden; }
         .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
         .fade-up.visible { opacity: 1; transform: translateY(0); }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
         .skill-bar { background: #e5e7eb; height: 2px; }
         .skill-fill { background: #000; height: 2px; transition: width 1.2s ease; width: 0; }
-    </style>
+        nav a { font-family: 'Noto Serif', serif; }
     </style>
 </head>
 <body class="selection:bg-black selection:text-white">
-    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
-        <div class="flex justify-between items-center px-8 md:px-12 py-6 max-w-screen-2xl mx-auto">
-            <a href="Home.html" style="font-family:'Noto Serif',serif" class="text-xl font-bold tracking-tighter text-black">Abdul Hakim Nur</a>
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100">
+        <div class="flex justify-between items-center px-5 sm:px-8 md:px-12 py-4 md:py-6 max-w-screen-2xl mx-auto">
+            <a href="Home.html" style="font-family:'Noto Serif',serif" class="text-lg sm:text-xl font-bold tracking-tighter text-black">Abdul Hakim Nur</a>
+            
+            <!-- Desktop Nav -->
             <div class="hidden md:flex items-center space-x-10">
-                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Home.html">Beranda</a>
-                <a class="text-black font-bold border-b border-black pb-0.5 text-sm" href="About.html">Tentang</a>
-                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Portofolio.html">Portofolio</a>
-                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Pengalaman.html">Pengalaman</a>
-                <a class="text-zinc-400 hover:text-black transition-colors text-sm" href="Kontak.html">Kontak</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm tracking-tight" href="Home.html">Beranda</a>
+                <a class="text-black font-bold border-b border-black pb-0.5 text-sm tracking-tight" href="About.html">Tentang</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm tracking-tight" href="Portofolio.html">Portofolio</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm tracking-tight" href="Pengalaman.html">Pengalaman</a>
+                <a class="text-zinc-400 hover:text-black transition-colors text-sm tracking-tight" href="Kontak.html">Kontak</a>
+            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <button id="mobile-menu-btn" type="button" class="md:hidden flex items-center justify-center w-10 h-10 text-black hover:bg-zinc-100 transition-colors focus:outline-none" aria-label="Menu" aria-expanded="false">
+                <span id="menu-icon" class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-2xl shadow-xl">
+            <div class="px-6 py-6 flex flex-col space-y-3">
+                <a class="text-zinc-600 hover:text-black text-base flex items-center justify-between py-2.5 border-b border-gray-100 transition-colors" href="Home.html">
+                    <span>Beranda</span>
+                    <span class="material-symbols-outlined text-sm text-zinc-400">arrow_forward</span>
+                </a>
+                <a class="text-black font-bold text-base flex items-center justify-between py-2.5 border-b border-gray-100" href="About.html">
+                    <span>Tentang</span>
+                    <span class="material-symbols-outlined text-sm text-black">arrow_forward</span>
+                </a>
+                <a class="text-zinc-600 hover:text-black text-base flex items-center justify-between py-2.5 border-b border-gray-100 transition-colors" href="Portofolio.html">
+                    <span>Portofolio</span>
+                    <span class="material-symbols-outlined text-sm text-zinc-400">arrow_forward</span>
+                </a>
+                <a class="text-zinc-600 hover:text-black text-base flex items-center justify-between py-2.5 border-b border-gray-100 transition-colors" href="Pengalaman.html">
+                    <span>Pengalaman</span>
+                    <span class="material-symbols-outlined text-sm text-zinc-400">arrow_forward</span>
+                </a>
+                <a class="text-zinc-600 hover:text-black text-base flex items-center justify-between py-2.5 border-b border-gray-100 transition-colors" href="Kontak.html">
+                    <span>Kontak</span>
+                    <span class="material-symbols-outlined text-sm text-zinc-400">arrow_forward</span>
+                </a>
+                
+                <div class="pt-4 flex items-center justify-between text-xs font-sans tracking-widest uppercase text-zinc-400">
+                    <span>Surabaya, ID</span>
+                    <div class="flex gap-4">
+                        <a href="mailto:kimdeadcartney@gmail.com" class="hover:text-black transition-colors">Email</a>
+                        <a href="https://wa.me/6285608969926" class="hover:text-black transition-colors">WhatsApp</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
-    <main class="pt-32 pb-40">
-
-        <!-- Hero nama -->
-        <section class="max-w-screen-2xl mx-auto px-8 mb-32 fade-up">
-            <div class="border-t border-gray-200 pt-12">
-                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-8">Tentang</span>
-                <h1 style="font-family:'Noto Serif',serif" class="text-7xl md:text-9xl font-normal tracking-tighter leading-none mb-0">
+    <main class="pt-24 sm:pt-28 md:pt-32 pb-24 sm:pb-32 md:pb-40">
+        <!-- Hero Nama -->
+        <section class="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 mb-16 sm:mb-24 md:mb-32 fade-up">
+            <div class="border-t border-gray-200 pt-8 sm:pt-12">
+                <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-6 sm:mb-8">Tentang</span>
+                <h1 style="font-family:'Noto Serif',serif" class="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-normal tracking-tighter leading-none mb-0 break-words">
                     Abdul Hakim Nur
                 </h1>
             </div>
         </section>
 
-    <!-- Foto + Bio -->
-<section class="max-w-screen-2xl mx-auto px-8 mb-40 fade-up">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-16">
-        <!-- Foto -->
-        <div class="md:col-span-4">
-            <div class="aspect-[3/4] bg-zinc-100 flex items-center justify-center relative overflow-hidden">
-                <img 
-                    src="./img/me.jpeg" 
-                    alt="Abdul Hakim Nur"
-                    class="w-full h-full object-cover object-center"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                />
-                <!-- Fallback kalau foto tidak ditemukan -->
-                <div class="text-center absolute inset-0 items-center justify-center hidden flex-col bg-zinc-100">
-                    <span class="material-symbols-outlined text-7xl text-zinc-300 block mb-4">person</span>
-                    <span class="font-sans text-xs tracking-widest uppercase text-zinc-300">Foto akan hadir</span>
+        <!-- Foto + Bio -->
+        <section class="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 mb-20 sm:mb-28 md:mb-40 fade-up">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+                <!-- Foto -->
+                <div class="md:col-span-4">
+                    <div class="aspect-[3/4] max-w-xs sm:max-w-sm md:max-w-none mx-auto md:mx-0 w-full bg-zinc-100 flex items-center justify-center relative overflow-hidden shadow-sm">
+                        <img 
+                            src="./img/me.jpeg" 
+                            alt="Abdul Hakim Nur"
+                            class="w-full h-full object-cover object-center"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                        />
+                        <!-- Fallback jika foto tidak ada -->
+                        <div class="text-center absolute inset-0 items-center justify-center hidden flex-col bg-zinc-100">
+                            <span class="material-symbols-outlined text-6xl sm:text-7xl text-zinc-300 block mb-4">person</span>
+                            <span class="font-sans text-xs tracking-widest uppercase text-zinc-400">Abdul Hakim Nur</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 sm:mt-6 space-y-1 sm:space-y-2 text-center md:text-left">
+                        <p class="font-sans text-xs tracking-widest uppercase text-zinc-400">Abdul Hakim Nur</p>
+                        <p style="font-family:'Noto Serif',serif" class="italic text-zinc-500 text-sm sm:text-base">Mahasiswa Informatika & Ilustrator</p>
+                    </div>
                 </div>
-               
-            </div>
-            <div class="mt-6 space-y-2">
-                <p class="font-sans text-xs tracking-widest uppercase text-zinc-400">Abdul Hakim Nur</p>
-                <p style="font-family:'Noto Serif',serif" class="italic text-zinc-500">Mahasiswa Informatika & Ilustrator</p>
-            </div>
-        </div>
+
                 <!-- Bio -->
                 <div class="md:col-span-7 md:col-start-6">
-                    <p class="text-2xl leading-relaxed text-zinc-800 mb-10">
+                    <p class="text-xl sm:text-2xl leading-relaxed text-zinc-800 mb-6 sm:mb-10 font-normal">
                         Saya adalah mahasiswa Informatika yang berfokus pada pengembangan web dan ilustrasi digital. Dua dunia yang kelihatannya berbeda, tapi bagi saya saling melengkapi — logika dan estetika.
                     </p>
-                    <p class="text-lg leading-relaxed text-zinc-500 mb-10">
+                    <p class="text-base sm:text-lg leading-relaxed text-zinc-600 mb-6 sm:mb-10">
                         Di sisi teknis, saya terbiasa membangun sistem berbasis PHP dan Laravel, bekerja dengan database MySQL, dan menyelesaikan proyek dari tahap wireframe di Figma sampai deployment. Saya pernah terlibat dalam proyek backend untuk institusi resmi — pengalaman yang mengajarkan pentingnya sistem yang andal dan terstruktur.
                     </p>
-                    <p class="text-lg leading-relaxed text-zinc-500 mb-16">
+                    <p class="text-base sm:text-lg leading-relaxed text-zinc-600 mb-8 sm:mb-12">
                         Di sisi kreatif, saya mengerjakan ilustrasi karakter digital — mulai dari desain orisinal hingga komisi dari komunitas online. Setiap karya adalah latihan presisi: garis yang tepat, proporsi yang matang, ekspresi yang berbicara.
                     </p>
-                    <div class="flex gap-6">
-                        <a href="Kontak.html" class="bg-black text-white px-10 py-4 text-xs font-sans tracking-widest uppercase hover:bg-zinc-800 transition-all">Hubungi Saya →</a>
-                        <a href="Portofolio.html" class="border border-black text-black px-10 py-4 text-xs font-sans tracking-widest uppercase hover:bg-black hover:text-white transition-all">Lihat Karya</a>
+                    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                        <a href="Kontak.html" class="w-full sm:w-auto bg-black text-white px-8 sm:px-10 py-4 text-xs font-sans tracking-widest uppercase hover:bg-zinc-800 transition-all text-center">Hubungi Saya →</a>
+                        <a href="Portofolio.html" class="w-full sm:w-auto border border-black text-black px-8 sm:px-10 py-4 text-xs font-sans tracking-widest uppercase hover:bg-black hover:text-white transition-all text-center">Lihat Karya</a>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Skills -->
-        <section class="max-w-screen-2xl mx-auto px-8 mb-40 fade-up">
-            <div class="border-t border-gray-200 pt-12 mb-16">
-                <h2 style="font-family:'Noto Serif',serif" class="text-4xl tracking-tighter">Keahlian</h2>
+        <section class="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 mb-20 sm:mb-28 md:mb-40 fade-up">
+            <div class="border-t border-gray-200 pt-8 sm:pt-12 mb-10 sm:mb-16">
+                <h2 style="font-family:'Noto Serif',serif" class="text-3xl sm:text-4xl tracking-tighter">Keahlian</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-24 gap-y-8 sm:gap-y-10">
                 <div class="skill-item">
                     <div class="flex justify-between mb-3">
                         <span class="font-sans text-xs tracking-widest uppercase">HTML & CSS</span>
@@ -153,42 +194,64 @@
         </section>
 
         <!-- Fakta singkat -->
-        <section class="max-w-screen-2xl mx-auto px-8 fade-up">
-            <div class="border-t border-gray-200 pt-12 grid grid-cols-2 md:grid-cols-4 gap-12">
+        <section class="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 fade-up">
+            <div class="border-t border-gray-200 pt-8 sm:pt-12 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-12">
                 <div>
-                    <p style="font-family:'Noto Serif',serif" class="text-5xl font-bold tracking-tighter mb-2">4+</p>
+                    <p style="font-family:'Noto Serif',serif" class="text-4xl sm:text-5xl font-bold tracking-tighter mb-2">4+</p>
                     <p class="font-sans text-xs tracking-widest uppercase text-zinc-400">Proyek Selesai</p>
                 </div>
                 <div>
-                    <p style="font-family:'Noto Serif',serif" class="text-5xl font-bold tracking-tighter mb-2">2+</p>
+                    <p style="font-family:'Noto Serif',serif" class="text-4xl sm:text-5xl font-bold tracking-tighter mb-2">2+</p>
                     <p class="font-sans text-xs tracking-widest uppercase text-zinc-400">Tahun Coding</p>
                 </div>
                 <div>
-                    <p style="font-family:'Noto Serif',serif" class="text-5xl font-bold tracking-tighter mb-2">1</p>
+                    <p style="font-family:'Noto Serif',serif" class="text-4xl sm:text-5xl font-bold tracking-tighter mb-2">1</p>
                     <p class="font-sans text-xs tracking-widest uppercase text-zinc-400">Pengalaman Magang</p>
                 </div>
                 <div>
-                    <p style="font-family:'Noto Serif',serif" class="text-5xl font-bold tracking-tighter mb-2">∞</p>
+                    <p style="font-family:'Noto Serif',serif" class="text-4xl sm:text-5xl font-bold tracking-tighter mb-2">∞</p>
                     <p class="font-sans text-xs tracking-widest uppercase text-zinc-400">Semangat Belajar</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="border-t border-gray-200 py-12 flex flex-col md:flex-row justify-between items-center px-8 max-w-screen-2xl mx-auto">
-        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-4 md:mb-0">© 2026 Abdul Hakim Nur</span>
-        <div class="flex gap-8">
+    <footer class="border-t border-gray-200 py-10 md:py-12 flex flex-col md:flex-row justify-between items-center px-5 sm:px-8 md:px-12 max-w-screen-2xl mx-auto gap-4 md:gap-0 text-center md:text-left">
+        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400">© 2026 Abdul Hakim Nur</span>
+        <div class="flex gap-6 sm:gap-8">
             <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="Kontak.html">Email</a>
+            <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="https://wa.me/6285608969926" target="_blank">WhatsApp</a>
             <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">GitHub</a>
             <a class="font-sans text-xs tracking-widest uppercase text-zinc-400 hover:text-black transition-colors" href="#">LinkedIn</a>
         </div>
     </footer>
 
     <script>
+        // Intersection Observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                const isOpen = !mobileMenu.classList.contains('hidden');
+                if (isOpen) {
+                    mobileMenu.classList.add('hidden');
+                    menuIcon.textContent = 'menu';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                } else {
+                    mobileMenu.classList.remove('hidden');
+                    menuIcon.textContent = 'close';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'true');
+                }
+            });
+        }
 
         // Animate skill bars
         const skillObserver = new IntersectionObserver((entries) => {
@@ -199,7 +262,7 @@
                     });
                 }
             });
-        }, { threshold: 0.3 });
+        }, { threshold: 0.2 });
         document.querySelectorAll('.fade-up').forEach(el => skillObserver.observe(el));
     </script>
 </body>
