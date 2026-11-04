@@ -199,6 +199,28 @@
         <section class="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 fade-up">
             <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12">
 
+                <!-- 0. PaletCraft Studio -->
+                <div class="project-card cursor-pointer group" data-category="web" onclick="openModal('paletcraft')">
+                    <div class="aspect-video overflow-hidden mb-4 sm:mb-6 relative bg-zinc-900">
+                        <img src="./img/paletcraft.png" alt="PaletCraft — Smart Palette & Contrast Studio"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onerror="this.style.display='none'"/>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/80">
+                            <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-6 py-3">Lihat Detail</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-2 sm:mb-3">
+                        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">PaletCraft — Palette & Contrast Studio</h3>
+                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0">2026</span>
+                    </div>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-2 sm:mb-3">Vanilla JS · Tailwind · Canvas · WCAG Tool</p>
+                    <p class="text-sm text-zinc-500 leading-relaxed mb-3">Generator palet warna harmonis interaktif dengan kalkulator rasio kontras aksesibilitas WCAG 2.1, simulasi live UI mockup, dan ekspor CSS/Tailwind/PNG.</p>
+                    <div class="flex items-center gap-1 font-sans text-[11px] uppercase tracking-widest text-zinc-400 group-hover:text-black transition-colors">
+                        <span>Lihat Detail</span>
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </div>
+                </div>
+
                 <!-- 1. Sistem Informasi Pariwisata PSO -->
                 <div class="project-card cursor-pointer group" data-category="web kampus" onclick="openModal('pso')">
                     <div class="aspect-video overflow-hidden mb-4 sm:mb-6 relative bg-teal-50">
@@ -520,6 +542,30 @@
 
         /* ── Project Data ── */
         const projects = {
+            paletcraft: {
+                title: 'PaletCraft — Smart Palette & Contrast Studio',
+                year: '2026',
+                category: 'Web Dev · Utility Tool',
+                stack: 'Vanilla JavaScript · Tailwind CSS · HTML5 Canvas · WCAG 2.1 API',
+                desc: 'Aplikasi web interaktif untuk kurasi palet warna harmonis dan pengujian rasio kontras aksesibilitas WCAG (Web Content Accessibility Guidelines). Dibuat untuk menjembatani kebutuhan desainer antarmuka dan pengembang web dalam memastikan estetika visual sekaligus keterbacaan teks bagi semua pengguna.',
+                features: [
+                    'Generator 5 warna harmonis acak dengan shortcut Spasi dan opsi kunci (lock/unlock) per warna',
+                    'Preset palet tematik: Nordic Minimal, Cyber Neon, Earthy Warm, Pastel Dream, Retro Sunset',
+                    'Kalkulator rasio kontras WCAG 2.1 otomatis dengan status evaluasi Level AA & AAA (Pass/Fail)',
+                    'Live UI Card Preview dinamis yang menguji penerapan warna pada tombol, teks, kartu, dan badge secara real-time',
+                    'Fitur ekspor fleksibel: CSS Variables (:root), Tailwind Config object, JSON, dan unduh gambar kartu palet beresolusi tinggi via HTML5 Canvas',
+                    'Sistem penyimpanan palet favorit lokal menggunakan browser LocalStorage',
+                ],
+                role: 'Sole Developer & Designer — merancang arsitektur aplikasi tanpa ketergantungan framework eksternal, mengimplementasikan algoritma perhitungan luminansi WCAG 2.1, dan merancang antarmuka pengguna yang bersih serta responsif.',
+                link: 'PaletCraft.html',
+                linkLabel: 'Coba Aplikasi Langsung',
+                images: [
+                    { src: './img/paletcraft.png', alt: 'Antarmuka Utama PaletCraft Studio' },
+                ],
+                bg: '#fafafa',
+                icon: 'palette',
+                iconColor: '#3b82f6',
+            },
             smr: {
                 title: 'Fleet Management System — Sumber Makmur Rafa',
                 year: '2026',
