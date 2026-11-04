@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SnapCraft — Aesthetic Korean Photobooth Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,300;0,400;0,700;1,400&family=Gaegu:wght@400;700&family=Caveat:wght@600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #faf7f5; font-family: 'Noto Serif', serif; overflow-x: hidden; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .font-cute { font-family: 'Gaegu', cursive; }
+        .font-hand { font-family: 'Caveat', cursive; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        
+        /* Camera Filters */
+        .filter-normal { filter: none; }
+        .filter-haru { filter: contrast(1.08) brightness(1.12) saturate(1.15) hue-rotate(-5deg); }
+        .filter-retro { filter: sepia(0.28) contrast(1.15) brightness(0.96) saturate(1.2); }
+        .filter-noir { filter: grayscale(1) contrast(1.35) brightness(0.95); }
+        .filter-warm { filter: sepia(0.22) saturate(1.3) brightness(1.04) hue-rotate(-10deg); }
+        .filter-pastel { filter: contrast(0.95) brightness(1.16) saturate(1.1) hue-rotate(15deg); }
+        .filter-cyber { filter: contrast(1.25) brightness(1.05) saturate(1.4) hue-rotate(20deg); }
+        .filter-vintage { filter: contrast(1.18) sepia(0.18) brightness(0.92) saturate(0.85); }
+
+        /* Video Mirror */
+        #webcam.mirrored {
+            transform: scaleX(-1);
+        }
+
+        /* Flash animation */
+        @keyframes cameraFlash {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .flash-active {
+            animation: cameraFlash 0.35s ease-out;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            transform: translateY(120%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .toast.show { transform: translateY(0); }
+
+        /* Strip shadow */
+        .photostrip-shadow {
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15), 0 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="selection:bg-pink-500 selection:text-white min-h-screen flex flex-col justify-between">
+
+    <!-- Flash Overlay -->
+    <div id="flash-overlay" class="fixed inset-0 bg-white pointer-events-none z-50 opacity-0"></div>
+
+    <!-- Top Navigation -->
+    <header class="border-b border-rose-100 bg-white/90 backdrop-blur-xl sticky top-0 z-40">
+        <div class="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 py-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="Portofolio.html" class="flex items-center gap-1.5 text-zinc-500 hover:text-black font-sans text-xs tracking-widest uppercase transition-colors">
+                    <span class="material-symbols-outlined text-base">arrow_back</span>
+                    <span class="hidden sm:inline">Portofolio</span>
+                </a>
+                <span class="text-zinc-300">|</span>
+                <div class="flex items-center gap-2">
+                    <span style="font-family:'Noto Serif',serif" class="text-lg font-bold tracking-tight text-black">SnapCraft</span>
+                    <span class="font-cute text-base px-2 py-0.5 bg-rose-100 text-rose-600 rounded-full font-bold">인생네컷 · 4-Cut Studio</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span id="step-indicator" class="font-sans text-xs uppercase tracking-wider text-zinc-400 hidden sm:inline">
+                    Langkah 1: Ambil Foto
+                </span>
+                <a href="#studio-section" class="bg-black text-white px-4 sm:px-5 py-2 font-sans text-xs tracking-widest uppercase hover:bg-zinc-800 transition-all flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-base">photo_camera</span>
+                    <span>Studio</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-grow max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 py-8 sm:py-12 w-full" id="studio-section">
+
+        <!-- Title & Intro -->
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8 sm:mb-12 border-b border-rose-100 pb-6">
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="font-sans text-xs tracking-widest uppercase text-rose-500 font-semibold">Webcam Photobooth</span>
+                    <span class="text-zinc-300">•</span>
+                    <span class="font-cute text-sm text-zinc-500">Self-photo studio kapan saja & di mana saja 📸</span>
+                </div>
+                <h1 style="font-family:'Noto Serif',serif" class="text-3xl sm:text-5xl font-normal tracking-tight text-black">
+                    Aesthetic Korean Photobooth
+                </h1>
+                <p class="font-sans text-sm text-zinc-500 mt-2 max-w-2xl leading-relaxed">
+                    Ambil 4 foto ala photobooth Korea (*Life4Cuts / Haru Film*). Lengkapi dengan filter aesthetic kekinian, layout strip lucu, stiker menggemaskan, dan unduh hasil fotomu secara instan!
+                </p>
+            </div>
+
+            <!-- Mode Selector -->
+            <div class="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-gray-200 shadow-sm">
+                <button onclick="setLayoutMode('4cut')" id="mode-btn-4cut" class="mode-btn px-4 py-2 rounded-lg font-sans text-xs font-semibold uppercase tracking-wider bg-black text-white transition-all">
+                    Classic 4-Cut
+                </button>
+                <button onclick="setLayoutMode('2x2')" id="mode-btn-2x2" class="mode-btn px-4 py-2 rounded-lg font-sans text-xs font-semibold uppercase tracking-wider text-zinc-600 hover:text-black transition-all">
+                    2x2 Grid
+                </button>
+                <button onclick="setLayoutMode('polaroid')" id="mode-btn-polaroid" class="mode-btn px-4 py-2 rounded-lg font-sans text-xs font-semibold uppercase tracking-wider text-zinc-600 hover:text-black transition-all">
+                    Polaroid
+                </button>
+            </div>
+        </div>
+
+        <!-- STAGE 1: CAMERA CAPTURE AREA -->
+        <section id="capture-stage" class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+
+            <!-- Webcam Viewport (Left/Center) -->
+            <div class="lg:col-span-8 bg-zinc-950 rounded-2xl overflow-hidden p-4 sm:p-6 shadow-xl flex flex-col items-center justify-between relative min-h-[480px] sm:min-h-[560px]">
+                
+                <!-- Camera Header Badges -->
+                <div class="w-full flex items-center justify-between text-white z-10 font-sans text-xs">
+                    <div class="flex items-center gap-2 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                        <span id="shot-counter">Foto 0 / 4</span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <!-- Toggle Mirror (Cermin) -->
+                        <button onclick="toggleMirror()" id="mirror-btn" class="flex items-center gap-1.5 px-3 py-1.5 bg-black/60 hover:bg-black/80 rounded-full border border-white/20 text-white transition-all text-xs font-sans" title="Flip Mirror Kamera">
+                            <span class="material-symbols-outlined text-base">swap_horiz</span>
+                            <span>Mirror: <strong id="mirror-status" class="text-rose-400">ON</strong></span>
+                        </button>
+                        <!-- Switch Camera (Mobile) -->
+                        <button onclick="flipCamera()" class="p-2 bg-black/50 hover:bg-black/80 rounded-full border border-white/10 text-white transition-all" title="Ganti Kamera">
+                            <span class="material-symbols-outlined text-lg">flip_camera_ios</span>
+                        </button>
+                        <!-- Fallback Upload Button -->
+                        <label class="p-2 bg-black/50 hover:bg-black/80 rounded-full border border-white/10 text-white transition-all cursor-pointer" title="Unggah Foto dari HP / Komputer">
+                            <span class="material-symbols-outlined text-lg">upload_file</span>
+                            <input type="file" accept="image/*" class="hidden" onchange="handleFileUpload(event)">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Video Element & Countdown Overlay -->
+                <div class="relative w-full max-w-lg aspect-[4/3] rounded-xl overflow-hidden bg-zinc-900 border border-white/10 my-4 flex items-center justify-center">
+                    <video id="webcam" autoplay playsinline muted class="w-full h-full object-cover filter-normal transition-all duration-300"></video>
+                    
+                    <!-- Countdown Display -->
+                    <div id="countdown-overlay" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center hidden">
+                        <span id="countdown-number" class="text-8xl sm:text-9xl font-bold font-sans text-white drop-shadow-2xl animate-ping">3</span>
+                    </div>
+
+                    <!-- Camera Permission Fallback Alert -->
+                    <div id="camera-fallback" class="absolute inset-0 bg-zinc-900 p-8 hidden flex-col items-center justify-center text-center text-white">
+                        <span class="material-symbols-outlined text-5xl text-rose-400 mb-3">videocam_off</span>
+                        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold mb-2">Kamera Belum Aktif</h3>
+                        <p class="font-sans text-xs text-zinc-400 max-w-sm mb-6">
+                            Izinkan akses webcam pada browser atau unggah foto langsung dari galeri ponsel/laptop kamu.
+                        </p>
+                        <div class="flex flex-wrap gap-3 justify-center">
+                            <button onclick="initCamera()" class="bg-rose-500 hover:bg-rose-600 text-white px-5 py-2.5 rounded-lg font-sans text-xs font-semibold uppercase tracking-wider">
+                                Coba Aktifkan Kamera
+                            </button>
+                            <label class="bg-white text-zinc-900 px-5 py-2.5 rounded-lg font-sans text-xs font-semibold uppercase tracking-wider cursor-pointer">
+                                Unggah Foto
+                                <input type="file" accept="image/*" class="hidden" onchange="handleFileUpload(event)">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Capture Controls Bar -->
+                <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4 z-10 pt-2 border-t border-white/10">
+                    <!-- Timer Selector -->
+                    <div class="flex items-center gap-2 text-white font-sans text-xs">
+                        <span class="text-zinc-400">Timer:</span>
+                        <button onclick="setTimerSec(3)" id="timer-3" class="timer-btn px-2.5 py-1 rounded bg-white text-black font-bold">3s</button>
+                        <button onclick="setTimerSec(5)" id="timer-5" class="timer-btn px-2.5 py-1 rounded bg-white/20 text-white">5s</button>
+                        <button onclick="setTimerSec(0)" id="timer-0" class="timer-btn px-2.5 py-1 rounded bg-white/20 text-white">Off</button>
+                    </div>
+
+                    <!-- Big Shutter Button -->
+                    <div class="flex items-center gap-4">
+                        <button onclick="startAutoCapture()" id="capture-btn" class="w-16 h-16 rounded-full bg-rose-500 hover:bg-rose-400 text-white border-4 border-white/40 shadow-xl flex items-center justify-center active:scale-95 transition-transform">
+                            <span class="material-symbols-outlined text-3xl">photo_camera</span>
+                        </button>
+                    </div>
+
+                    <!-- Auto Burst vs Single -->
+                    <div class="flex items-center gap-2 text-white font-sans text-xs">
+                        <button onclick="takeSingleShot()" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
+                            1x Jepret
+                        </button>
+                        <button onclick="startAutoCapture()" class="px-3 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/30 transition-colors">
+                            Auto 4x Berurutan ✦
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters & Captured Preview Thumbnails (Right Side) -->
+            <div class="lg:col-span-4 flex flex-col justify-between gap-6">
+
+                <!-- Aesthetic Filter Selector -->
+                <div class="bg-white border border-rose-100 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 font-bold">Pilihan Filter Kekinian</span>
+                        <span class="font-cute text-sm text-rose-500">8 Gaya Aesthetic</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2.5" id="filter-picker">
+                        <button onclick="applyFilter('filter-normal')" class="filter-btn active p-2.5 text-left rounded-lg border border-black font-sans text-xs font-semibold">
+                            Natural · Asli
+                        </button>
+                        <button onclick="applyFilter('filter-haru')" class="filter-btn p-2.5 text-left rounded-lg border border-gray-200 hover:border-black font-sans text-xs font-semibold text-sky-700">
+                            Tokyo Blue · Haru 🌸
+                        </button>
+                        <button onclick="applyFilter('filter-retro')" class="filter-btn p-2.5 text-left rounded-lg border border-gray-200 hover:border-black font-sans text-xs font-semibold text-amber-700">
+                            90s Retro Film 🎞️
+                        </button>
+                        <button onclick="applyFilter('filter-noir')" class="filter-btn p-2.5 text-left rounded-lg border border-gray-200 hover:border-black font-sans text-xs font-semibold text-zinc-800">
+                            Noir Classic B&W 🖤
+                        </button>
+                        <button onclick="applyFilter('filter-warm')" class="filter-btn p-2.5 text-left rounded-lg border border-gray-200 hover:border-black font-sans text-xs font-semibold text-orange-600">
+                            Golden Cozy ☕
+                        </button>
+                        <button onclick="applyFilter('filter-pastel')" class="filter-btn p-2.5 text-left rounded-lg border border-gray-200 hover:border-black font-sans text-xs font-semibold text-pink-600">
+                            Dreamy Pastel 🎀
+                        </button>
+                        <button onclick="applyFilter('filter-cyber')" class="filter-btn p-2.5 text-left rounded-lg border border-gray-200 hover:border-black font-sans text-xs font-semibold text-purple-600">
+                            Cyber Y2K Neon ⚡
+                        </button>
+                        <button onclick="applyFilter('filter-vintage')" class="filter-btn p-2.5 text-left rounded-lg border border-gray-200 hover:border-black font-sans text-xs font-semibold text-stone-600">
+                            Vintage Grain 📷
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Captured Shots Strip Preview -->
+                <div class="bg-white border border-rose-100 rounded-2xl p-6 shadow-sm flex-grow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 font-bold">Hasil Jepretan</span>
+                            <button onclick="resetShots()" class="font-sans text-xs text-zinc-400 hover:text-red-500">Reset</button>
+                        </div>
+
+                        <div class="grid grid-cols-4 gap-2 mb-4" id="thumb-strip-preview">
+                            <div class="aspect-[4/3] rounded bg-zinc-100 border border-dashed border-gray-300 flex items-center justify-center text-zinc-300 font-sans text-xs font-bold" id="slot-0">1</div>
+                            <div class="aspect-[4/3] rounded bg-zinc-100 border border-dashed border-gray-300 flex items-center justify-center text-zinc-300 font-sans text-xs font-bold" id="slot-1">2</div>
+                            <div class="aspect-[4/3] rounded bg-zinc-100 border border-dashed border-gray-300 flex items-center justify-center text-zinc-300 font-sans text-xs font-bold" id="slot-2">3</div>
+                            <div class="aspect-[4/3] rounded bg-zinc-100 border border-dashed border-gray-300 flex items-center justify-center text-zinc-300 font-sans text-xs font-bold" id="slot-3">4</div>
+                        </div>
+                    </div>
+
+                    <button onclick="proceedToDecoration()" id="edit-strip-btn" class="w-full bg-black hover:bg-zinc-800 text-white py-3.5 rounded-xl font-sans text-xs tracking-widest uppercase font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                        Hias & Download Foto Strip →
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- STAGE 2: CUSTOMIZE, STICKERS & DOWNLOAD (Visible after capture or button click) -->
+        <section id="customization-stage" class="border-t border-rose-100 pt-12 pb-16">
+            <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                    <span class="font-sans text-xs tracking-widest uppercase text-rose-500 font-bold block mb-1">Studio Hiasan</span>
+                    <h2 style="font-family:'Noto Serif',serif" class="text-3xl font-bold tracking-tight">Kustomisasi Strip & Download</h2>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="retakePhotos()" class="border border-gray-300 text-zinc-700 hover:border-black px-4 py-2.5 rounded-lg font-sans text-xs tracking-wider uppercase transition-all flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-base">replay</span>
+                        <span>Foto Ulang</span>
+                    </button>
+                    <button onclick="downloadStripPng()" class="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2.5 rounded-lg font-sans text-xs tracking-widest uppercase font-bold shadow-lg shadow-rose-200 transition-all flex items-center gap-2">
+                        <span class="material-symbols-outlined text-base">download</span>
+                        <span>Download Strip (PNG)</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+
+                <!-- Left: Customization Options (Theme, Stickers, Text) -->
+                <div class="lg:col-span-6 space-y-8 order-2 lg:order-1">
+
+                    <!-- Frame Colors -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 font-bold block mb-4">Warna Bingkai (Frame)</span>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="setFrameBg('#FFFFFF')" class="w-9 h-9 rounded-full border-2 border-zinc-300 bg-white shadow-sm hover:scale-110 transition-transform active:ring-2 ring-black" title="Putih Klasik"></button>
+                            <button onclick="setFrameBg('#18181B')" class="w-9 h-9 rounded-full border-2 border-zinc-400 bg-zinc-900 shadow-sm hover:scale-110 transition-transform" title="Hitam Elegan"></button>
+                            <button onclick="setFrameBg('#FFE4E6')" class="w-9 h-9 rounded-full border-2 border-rose-300 bg-rose-100 shadow-sm hover:scale-110 transition-transform" title="Pastel Pink"></button>
+                            <button onclick="setFrameBg('#E0F2FE')" class="w-9 h-9 rounded-full border-2 border-sky-300 bg-sky-100 shadow-sm hover:scale-110 transition-transform" title="Cloud Baby Blue"></button>
+                            <button onclick="setFrameBg('#DCFCE7')" class="w-9 h-9 rounded-full border-2 border-emerald-300 bg-emerald-100 shadow-sm hover:scale-110 transition-transform" title="Matcha Green"></button>
+                            <button onclick="setFrameBg('#FEF3C7')" class="w-9 h-9 rounded-full border-2 border-amber-300 bg-amber-100 shadow-sm hover:scale-110 transition-transform" title="Butter Yellow"></button>
+                            <button onclick="setFrameBg('#F3E8FF')" class="w-9 h-9 rounded-full border-2 border-purple-300 bg-purple-100 shadow-sm hover:scale-110 transition-transform" title="Lavender"></button>
+                            <button onclick="setFrameBg('#FEE2E2')" class="w-9 h-9 rounded-full border-2 border-red-300 bg-red-100 shadow-sm hover:scale-110 transition-transform" title="Cherry Red"></button>
+                        </div>
+                    </div>
+
+                    <!-- Cute Stickers Selector -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 font-bold">Stiker Lucu & Aesthetic</span>
+                            <span class="font-cute text-sm text-rose-500">Klik stiker untuk pasang di foto!</span>
+                        </div>
+                        <div class="grid grid-cols-6 sm:grid-cols-8 gap-3 py-2 text-2xl text-center" id="stickers-tray">
+                            <button onclick="addSticker('✨')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">✨</button>
+                            <button onclick="addSticker('💖')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">💖</button>
+                            <button onclick="addSticker('🎀')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">🎀</button>
+                            <button onclick="addSticker('🐱')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">🐱</button>
+                            <button onclick="addSticker('🐰')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">🐰</button>
+                            <button onclick="addSticker('🌸')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">🌸</button>
+                            <button onclick="addSticker('⭐')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">⭐</button>
+                            <button onclick="addSticker('🍒')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">🍒</button>
+                            <button onclick="addSticker('🧸')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">🧸</button>
+                            <button onclick="addSticker('🍀')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">🍀</button>
+                            <button onclick="addSticker('🍰')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">🍰</button>
+                            <button onclick="addSticker('🦋')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">🦋</button>
+                            <button onclick="addSticker('💌')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">💌</button>
+                            <button onclick="addSticker('🎧')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">🎧</button>
+                            <button onclick="addSticker('🫧')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">🫧</button>
+                            <button onclick="addSticker('⚡')" class="p-2 hover:scale-125 transition-transform bg-zinc-50 rounded-lg">⚡</button>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-sans text-zinc-400">
+                            <span>Stiker dapat digeser di atas canvas preview.</span>
+                            <button onclick="clearAllStickers()" class="text-rose-500 hover:underline">Hapus Semua Stiker</button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Text & Date -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 font-bold block mb-4">Kustomisasi Tulisan & Tanggal</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="font-sans text-xs text-zinc-500 block mb-1">Catatan Kaki (Footer Text)</label>
+                                <input type="text" id="strip-caption-input" value="sweet memories ✦" oninput="redrawCanvas()" class="w-full border border-gray-200 p-2.5 rounded font-cute text-base bg-zinc-50 focus:outline-none focus:border-black">
+                            </div>
+                            <div>
+                                <label class="font-sans text-xs text-zinc-500 block mb-1">Tanggal & Studio Mark</label>
+                                <input type="text" id="strip-date-input" value="2026.11.04 SnapCraft Studio" oninput="redrawCanvas()" class="w-full border border-gray-200 p-2.5 rounded font-sans text-xs bg-zinc-50 focus:outline-none focus:border-black">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right: Live Canvas Preview -->
+                <div class="lg:col-span-6 flex flex-col items-center justify-start order-1 lg:order-2">
+                    <div class="sticky top-24 flex flex-col items-center">
+                        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-3">Live Strip Preview</span>
+                        
+                        <!-- Interactive Canvas -->
+                        <div class="p-3 bg-zinc-100 rounded-2xl border border-gray-200 photostrip-shadow relative">
+                            <canvas id="strip-canvas" width="480" height="1350" class="max-h-[640px] sm:max-h-[720px] w-auto rounded-lg shadow-inner cursor-crosshair"></canvas>
+                        </div>
+
+                        <div class="mt-4 flex gap-3 text-xs font-sans">
+                            <button onclick="downloadStripPng()" class="bg-black text-white px-8 py-3 rounded-xl font-bold uppercase tracking-wider hover:bg-zinc-800 transition-all shadow-md flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base">file_download</span>
+                                <span>Simpan Foto Strip</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-rose-100 py-8 bg-white text-center font-sans text-xs text-zinc-400">
+        <div class="max-w-screen-2xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <span>© 2026 Abdul Hakim Nur — SnapCraft Photobooth Studio</span>
+            <div class="flex gap-6">
+                <a href="Home.html" class="hover:text-black transition-colors">Beranda</a>
+                <a href="Portofolio.html" class="hover:text-black transition-colors">Portofolio</a>
+                <a href="PaletCraft.html" class="hover:text-black transition-colors">PaletCraft</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast bg-zinc-900 text-white px-5 py-3 rounded-xl shadow-2xl font-sans text-xs tracking-wider uppercase flex items-center gap-2">
+        <span class="material-symbols-outlined text-base text-rose-400">favorite</span>
+        <span id="toast-message">Pesan notifikasi</span>
+    </div>
+
+    <!-- Hidden audio elements (audio beeps synthesized via Web Audio API) -->
+
+    <!-- APPLICATION LOGIC SCRIPT -->
+    <script>
+        // State
+        let stream = null;
+        let currentFacingMode = 'user'; // 'user' or 'environment'
+        let isMirrored = true;
+        let currentFilter = 'filter-normal';
+        let timerSeconds = 3;
+        let layoutMode = '4cut'; // '4cut', '2x2', 'polaroid'
+        let frameBgColor = '#FFFFFF';
+        let capturedImages = []; // Stores Image elements or base64
+        let isCapturing = false;
+
+        // Stickers on canvas
+        let stickers = [];
+        let isDraggingSticker = false;
+        let selectedStickerIndex = -1;
+
+        // Sound synthesizer (Web Audio API)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playBeep(freq = 600, duration = 0.1) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function playShutterSound() {
+            playBeep(900, 0.08);
+            setTimeout(() => playBeep(1200, 0.15), 80);
+        }
+
+        // Initialize Camera
+        window.addEventListener('DOMContentLoaded', () => {
+            initCamera();
+            initSampleStrip();
+            setupCanvasInteraction();
+        });
+
+        async function initCamera() {
+            try {
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+                const constraints = {
+                    video: {
+                        facingMode: currentFacingMode,
+                        width: { ideal: 1280 },
+                        height: { ideal: 960 }
+                    },
+                    audio: false
+                };
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                const videoEl = document.getElementById('webcam');
+                videoEl.srcObject = stream;
+                document.getElementById('camera-fallback').classList.add('hidden');
+                updateMirrorUI();
+                showToast('Kamera terhubung!');
+            } catch (err) {
+                console.warn('Webcam not accessible:', err);
+                document.getElementById('camera-fallback').classList.remove('hidden');
+            }
+        }
+
+        function updateMirrorUI() {
+            const videoEl = document.getElementById('webcam');
+            if (isMirrored) {
+                videoEl.classList.add('mirrored');
+            } else {
+                videoEl.classList.remove('mirrored');
+            }
+            const statusEl = document.getElementById('mirror-status');
+            if (statusEl) {
+                statusEl.textContent = isMirrored ? 'ON' : 'OFF';
+                statusEl.className = isMirrored ? 'text-rose-400 font-bold' : 'text-zinc-400 font-bold';
+            }
+        }
+
+        function toggleMirror() {
+            isMirrored = !isMirrored;
+            updateMirrorUI();
+            showToast(isMirrored ? 'Mirror kamera: AKTIF (Cermin)' : 'Mirror kamera: NONAKTIF');
+        }
+
+        function flipCamera() {
+            currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+            initCamera();
+        }
+
+        function setTimerSec(sec) {
+            timerSeconds = sec;
+            [0, 3, 5].forEach(s => {
+                const btn = document.getElementById(`timer-${s}`);
+                if (s === sec) {
+                    btn.className = 'timer-btn px-2.5 py-1 rounded bg-white text-black font-bold';
+                } else {
+                    btn.className = 'timer-btn px-2.5 py-1 rounded bg-white/20 text-white';
+                }
+            });
+        }
+
+        function applyFilter(filterClass) {
+            currentFilter = filterClass;
+            const videoEl = document.getElementById('webcam');
+            videoEl.className = `w-full h-full object-cover ${filterClass} transition-all duration-300`;
+
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'border-black'));
+            event.currentTarget.classList.add('active', 'border-black');
+
+            // If images are already taken, re-render canvas with new filter
+            redrawCanvas();
+        }
+
+        function setLayoutMode(mode) {
+            layoutMode = mode;
+            ['4cut', '2x2', 'polaroid'].forEach(m => {
+                const btn = document.getElementById(`mode-btn-${m}`);
+                if (m === mode) {
+                    btn.className = 'mode-btn px-4 py-2 rounded-lg font-sans text-xs font-semibold uppercase tracking-wider bg-black text-white transition-all';
+                } else {
+                    btn.className = 'mode-btn px-4 py-2 rounded-lg font-sans text-xs font-semibold uppercase tracking-wider text-zinc-600 hover:text-black transition-all';
+                }
+            });
+            resetShots();
+            redrawCanvas();
+            showToast(`Mode ${mode.toUpperCase()} dipilih!`);
+        }
+
+        // Single Shot
+        function takeSingleShot() {
+            if (isCapturing) return;
+            doCountdown(() => {
+                captureFrame();
+            });
+        }
+
+        // Auto 4-Burst Mode
+        function startAutoCapture() {
+            if (isCapturing) return;
+            capturedImages = [];
+            updateThumbnails();
+            isCapturing = true;
+
+            const total = layoutMode === 'polaroid' ? 1 : 4;
+            let current = 0;
+
+            function nextShot() {
+                if (current >= total) {
+                    isCapturing = false;
+                    showToast('Semua foto berhasil diambil!');
+                    proceedToDecoration();
+                    return;
+                }
+                document.getElementById('shot-counter').textContent = `Foto ${current + 1} / ${total}`;
+                doCountdown(() => {
+                    captureFrame();
+                    current++;
+                    if (current < total) {
+                        setTimeout(nextShot, 1200); // 1.2s break between shots
+                    } else {
+                        isCapturing = false;
+                        showToast('Selesai! Ayo hias fotomu ✨');
+                        proceedToDecoration();
+                    }
+                });
+            }
+
+            nextShot();
+        }
+
+        // Countdown Timer Overlay
+        function doCountdown(callback) {
+            if (timerSeconds === 0) {
+                triggerFlash();
+                callback();
+                return;
+            }
+
+            const overlay = document.getElementById('countdown-overlay');
+            const numEl = document.getElementById('countdown-number');
+            overlay.classList.remove('hidden');
+
+            let count = timerSeconds;
+            numEl.textContent = count;
+            playBeep(750, 0.1);
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    numEl.textContent = count;
+                    playBeep(750, 0.1);
+                } else {
+                    clearInterval(timer);
+                    overlay.classList.add('hidden');
+                    triggerFlash();
+                    callback();
+                }
+            }, 1000);
+        }
+
+        function triggerFlash() {
+            playShutterSound();
+            const flash = document.getElementById('flash-overlay');
+            flash.classList.add('flash-active');
+            setTimeout(() => {
+                flash.classList.remove('flash-active');
+            }, 350);
+        }
+
+        // Capture Frame from Video
+        function captureFrame() {
+            const video = document.getElementById('webcam');
+            const offCanvas = document.createElement('canvas');
+            offCanvas.width = video.videoWidth || 640;
+            offCanvas.height = video.videoHeight || 480;
+            const ctx = offCanvas.getContext('2d');
+
+            // Apply filter to canvas if not normal
+            ctx.filter = getComputedStyle(video).filter;
+
+            // Apply horizontal mirror if active so capture matches preview
+            if (isMirrored) {
+                ctx.translate(offCanvas.width, 0);
+                ctx.scale(-1, 1);
+            }
+
+            ctx.drawImage(video, 0, 0, offCanvas.width, offCanvas.height);
+
+            const imgData = offCanvas.toDataURL('image/jpeg', 0.95);
+            capturedImages.push(imgData);
+
+            updateThumbnails();
+            redrawCanvas();
+        }
+
+        // Fallback File Upload
+        function handleFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                capturedImages.push(evt.target.result);
+                updateThumbnails();
+                redrawCanvas();
+                showToast('Foto berhasil ditambahkan!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateThumbnails() {
+            const total = layoutMode === 'polaroid' ? 1 : 4;
+            for (let i = 0; i < 4; i++) {
+                const slot = document.getElementById(`slot-${i}`);
+                if (capturedImages[i]) {
+                    slot.innerHTML = `<img src="${capturedImages[i]}" class="w-full h-full object-cover rounded shadow-sm">`;
+                    slot.className = 'aspect-[4/3] rounded overflow-hidden border border-rose-300';
+                } else {
+                    slot.innerHTML = (i + 1).toString();
+                    slot.className = 'aspect-[4/3] rounded bg-zinc-100 border border-dashed border-gray-300 flex items-center justify-center text-zinc-300 font-sans text-xs font-bold';
+                }
+            }
+
+            document.getElementById('shot-counter').textContent = `Foto ${capturedImages.length} / ${total}`;
+            const editBtn = document.getElementById('edit-strip-btn');
+            editBtn.disabled = capturedImages.length === 0;
+        }
+
+        function resetShots() {
+            capturedImages = [];
+            stickers = [];
+            updateThumbnails();
+            initSampleStrip();
+            showToast('Foto di-reset.');
+        }
+
+        function proceedToDecoration() {
+            document.getElementById('customization-stage').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('step-indicator').textContent = 'Langkah 2: Hias & Download';
+        }
+
+        function retakePhotos() {
+            document.getElementById('capture-stage').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('step-indicator').textContent = 'Langkah 1: Ambil Foto';
+        }
+
+        function setFrameBg(color) {
+            frameBgColor = color;
+            redrawCanvas();
+            showToast('Warna bingkai diubah!');
+        }
+
+        // Stickers Management
+        function addSticker(emoji) {
+            const canvas = document.getElementById('strip-canvas');
+            stickers.push({
+                emoji: emoji,
+                x: canvas.width / 2 + (Math.random() * 80 - 40),
+                y: canvas.height / 2 + (Math.random() * 120 - 60),
+                size: 48,
+                rotation: (Math.random() * 30 - 15) * (Math.PI / 180)
+            });
+            redrawCanvas();
+            showToast(`Stiker ${emoji} ditambahkan! Geser untuk memindahkan.`);
+        }
+
+        function clearAllStickers() {
+            stickers = [];
+            redrawCanvas();
+            showToast('Semua stiker dihapus.');
+        }
+
+        // Canvas Interaction (Drag Stickers)
+        function setupCanvasInteraction() {
+            const canvas = document.getElementById('strip-canvas');
+
+            canvas.addEventListener('mousedown', (e) => {
+                const pos = getCanvasPos(e, canvas);
+                selectedStickerIndex = findStickerAtPos(pos.x, pos.y);
+                if (selectedStickerIndex !== -1) {
+                    isDraggingSticker = true;
+                }
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (isDraggingSticker && selectedStickerIndex !== -1) {
+                    const pos = getCanvasPos(e, canvas);
+                    stickers[selectedStickerIndex].x = pos.x;
+                    stickers[selectedStickerIndex].y = pos.y;
+                    redrawCanvas();
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDraggingSticker = false;
+            });
+
+            // Touch support for mobile devices
+            canvas.addEventListener('touchstart', (e) => {
+                const touch = e.touches[0];
+                const pos = getCanvasPos(touch, canvas);
+                selectedStickerIndex = findStickerAtPos(pos.x, pos.y);
+                if (selectedStickerIndex !== -1) {
+                    isDraggingSticker = true;
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            canvas.addEventListener('touchmove', (e) => {
+                if (isDraggingSticker && selectedStickerIndex !== -1) {
+                    const touch = e.touches[0];
+                    const pos = getCanvasPos(touch, canvas);
+                    stickers[selectedStickerIndex].x = pos.x;
+                    stickers[selectedStickerIndex].y = pos.y;
+                    redrawCanvas();
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            canvas.addEventListener('touchend', () => {
+                isDraggingSticker = false;
+            });
+        }
+
+        function getCanvasPos(e, canvas) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        function findStickerAtPos(x, y) {
+            for (let i = stickers.length - 1; i >= 0; i--) {
+                const s = stickers[i];
+                const dist = Math.hypot(s.x - x, s.y - y);
+                if (dist < s.size) return i;
+            }
+            return -1;
+        }
+
+        // Draw Sample Strip initially if no photos yet
+        function initSampleStrip() {
+            redrawCanvas();
+        }
+
+        // Main Render Loop onto HTML5 Canvas
+        function redrawCanvas() {
+            const canvas = document.getElementById('strip-canvas');
+            const ctx = canvas.getContext('2d');
+
+            if (layoutMode === '4cut') {
+                render4CutStrip(canvas, ctx);
+            } else if (layoutMode === '2x2') {
+                render2x2Grid(canvas, ctx);
+            } else if (layoutMode === 'polaroid') {
+                renderPolaroid(canvas, ctx);
+            }
+        }
+
+        function render4CutStrip(canvas, ctx) {
+            canvas.width = 480;
+            canvas.height = 1420;
+
+            // Background
+            ctx.fillStyle = frameBgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Border color line
+            ctx.strokeStyle = '#e4e4e7';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+            // 4 Photos
+            const padX = 36;
+            const padY = 40;
+            const imgW = canvas.width - (padX * 2);
+            const imgH = 265;
+            const gap = 20;
+
+            for (let i = 0; i < 4; i++) {
+                const y = padY + i * (imgH + gap);
+
+                if (capturedImages[i]) {
+                    const img = new Image();
+                    img.src = capturedImages[i];
+                    ctx.drawImage(img, padX, y, imgW, imgH);
+                } else {
+                    // Placeholder card
+                    ctx.fillStyle = '#f4f4f5';
+                    ctx.fillRect(padX, y, imgW, imgH);
+                    ctx.fillStyle = '#a1a1aa';
+                    ctx.font = 'bold 20px "Inter", sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`Foto ${i + 1}`, canvas.width / 2, y + imgH / 2 + 6);
+                }
+            }
+
+            // Footer texts
+            const caption = document.getElementById('strip-caption-input').value;
+            const dateStr = document.getElementById('strip-date-input').value;
+            const textColor = frameBgColor === '#18181B' ? '#FFFFFF' : '#18181B';
+            const subTextColor = frameBgColor === '#18181B' ? '#A1A1AA' : '#71717A';
+
+            ctx.textAlign = 'center';
+            ctx.fillStyle = textColor;
+            ctx.font = '28px "Gaegu", cursive';
+            ctx.fillText(caption, canvas.width / 2, 1260);
+
+            ctx.fillStyle = subTextColor;
+            ctx.font = '13px "Inter", sans-serif';
+            ctx.fillText(dateStr, canvas.width / 2, 1310);
+
+            // Cute watermark icon
+            ctx.font = '16px "Noto Serif", serif';
+            ctx.fillText('✦ ✦ ✦', canvas.width / 2, 1355);
+
+            // Draw Stickers
+            drawStickers(ctx);
+        }
+
+        function render2x2Grid(canvas, ctx) {
+            canvas.width = 720;
+            canvas.height = 840;
+
+            ctx.fillStyle = frameBgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const pad = 40;
+            const gap = 20;
+            const imgW = (canvas.width - (pad * 2) - gap) / 2;
+            const imgH = 280;
+
+            const coords = [
+                { x: pad, y: pad },
+                { x: pad + imgW + gap, y: pad },
+                { x: pad, y: pad + imgH + gap },
+                { x: pad + imgW + gap, y: pad + imgH + gap }
+            ];
+
+            for (let i = 0; i < 4; i++) {
+                const { x, y } = coords[i];
+                if (capturedImages[i]) {
+                    const img = new Image();
+                    img.src = capturedImages[i];
+                    ctx.drawImage(img, x, y, imgW, imgH);
+                } else {
+                    ctx.fillStyle = '#f4f4f5';
+                    ctx.fillRect(x, y, imgW, imgH);
+                    ctx.fillStyle = '#a1a1aa';
+                    ctx.font = 'bold 20px "Inter", sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`Foto ${i + 1}`, x + imgW / 2, y + imgH / 2 + 6);
+                }
+            }
+
+            const caption = document.getElementById('strip-caption-input').value;
+            const dateStr = document.getElementById('strip-date-input').value;
+            const textColor = frameBgColor === '#18181B' ? '#FFFFFF' : '#18181B';
+
+            ctx.textAlign = 'center';
+            ctx.fillStyle = textColor;
+            ctx.font = '32px "Gaegu", cursive';
+            ctx.fillText(caption, canvas.width / 2, 720);
+
+            ctx.font = '13px "Inter", sans-serif';
+            ctx.fillStyle = frameBgColor === '#18181B' ? '#A1A1AA' : '#71717A';
+            ctx.fillText(dateStr, canvas.width / 2, 760);
+
+            drawStickers(ctx);
+        }
+
+        function renderPolaroid(canvas, ctx) {
+            canvas.width = 540;
+            canvas.height = 680;
+
+            ctx.fillStyle = frameBgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const pad = 40;
+            const imgW = canvas.width - (pad * 2);
+            const imgH = 460;
+
+            if (capturedImages[0]) {
+                const img = new Image();
+                img.src = capturedImages[0];
+                ctx.drawImage(img, pad, pad, imgW, imgH);
+            } else {
+                ctx.fillStyle = '#f4f4f5';
+                ctx.fillRect(pad, pad, imgW, imgH);
+                ctx.fillStyle = '#a1a1aa';
+                ctx.font = 'bold 24px "Inter", sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Foto Polaroid', canvas.width / 2, pad + imgH / 2);
+            }
+
+            const caption = document.getElementById('strip-caption-input').value;
+            const dateStr = document.getElementById('strip-date-input').value;
+            const textColor = frameBgColor === '#18181B' ? '#FFFFFF' : '#18181B';
+
+            ctx.textAlign = 'center';
+            ctx.fillStyle = textColor;
+            ctx.font = '36px "Caveat", cursive';
+            ctx.fillText(caption, canvas.width / 2, 570);
+
+            ctx.font = '12px "Inter", sans-serif';
+            ctx.fillStyle = frameBgColor === '#18181B' ? '#A1A1AA' : '#71717A';
+            ctx.fillText(dateStr, canvas.width / 2, 615);
+
+            drawStickers(ctx);
+        }
+
+        function drawStickers(ctx) {
+            stickers.forEach(s => {
+                ctx.save();
+                ctx.translate(s.x, s.y);
+                ctx.rotate(s.rotation);
+                ctx.font = `${s.size}px serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(s.emoji, 0, 0);
+                ctx.restore();
+            });
+        }
+
+        // Download PNG
+        function downloadStripPng() {
+            const canvas = document.getElementById('strip-canvas');
+            const link = document.createElement('a');
+            link.download = `SnapCraft-Photobooth-${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+            showToast('Foto Strip berhasil diunduh! 📸✨');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

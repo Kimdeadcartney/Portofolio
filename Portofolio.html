@@ -511,11 +511,16 @@
                     </div>
 
                     <!-- Link -->
-                    <div id="modal-link-wrap" class="hidden">
+                    <div id="modal-link-wrap" class="hidden flex flex-wrap gap-3">
                         <a id="modal-link" href="#" target="_blank"
-                            class="inline-flex items-center gap-2 font-sans text-xs tracking-widest uppercase border border-black px-6 py-3.5 hover:bg-black hover:text-white transition-all">
+                            class="inline-flex items-center gap-2 font-sans text-xs tracking-widest uppercase bg-black text-white px-6 py-3.5 hover:bg-zinc-800 transition-all">
                             <span id="modal-link-label">Buka Website</span>
                             <span class="material-symbols-outlined text-sm">open_in_new</span>
+                        </a>
+                        <a id="modal-github" href="#" target="_blank"
+                            class="inline-flex items-center gap-2 font-sans text-xs tracking-widest uppercase border border-gray-300 text-zinc-700 px-6 py-3.5 hover:border-black hover:text-black transition-all hidden">
+                            <span>GitHub Repo</span>
+                            <span class="material-symbols-outlined text-sm">code</span>
                         </a>
                     </div>
                 </div>
@@ -580,8 +585,9 @@
                     'Render kanvas resolusi tinggi dengan ekspor instan format PNG tanpa watermark berlebih',
                 ],
                 role: 'Full-stack Creative Developer — merancang arsitektur sistem pengolahan video stream ke kanvas, filter grafis real-time, interaksi drag-and-drop stiker, dan antarmuka pengguna responsif ramah sentuhan (touch-friendly).',
-                link: 'https://github.com/Kimdeadcartney/SnapCraft',
-                linkLabel: 'Buka di GitHub',
+                link: 'SnapCraft.html',
+                linkLabel: 'Buka Photobooth Studio',
+                github: 'https://github.com/Kimdeadcartney/SnapCraft',
                 images: [
                     { src: './img/snapcraft.png', alt: 'SnapCraft Photobooth Studio Interface' },
                 ],
@@ -604,8 +610,9 @@
                     'Sistem penyimpanan palet favorit lokal menggunakan browser LocalStorage',
                 ],
                 role: 'Sole Developer & Designer — merancang arsitektur aplikasi tanpa ketergantungan framework eksternal, mengimplementasikan algoritma perhitungan luminansi WCAG 2.1, dan merancang antarmuka pengguna yang bersih serta responsif.',
-                link: 'https://github.com/Kimdeadcartney/PaletCraft',
-                linkLabel: 'Buka di GitHub',
+                link: 'PaletCraft.html',
+                linkLabel: 'Buka Color Studio',
+                github: 'https://github.com/Kimdeadcartney/PaletCraft',
                 images: [
                     { src: './img/paletcraft.png', alt: 'Antarmuka Utama PaletCraft Studio' },
                 ],
@@ -925,11 +932,30 @@
                 rw.classList.add('hidden');
             }
 
-            // Link
+            // Links
             const lw = document.getElementById('modal-link-wrap');
+            const ml = document.getElementById('modal-link');
+            const mg = document.getElementById('modal-github');
+            let hasAny = false;
+
             if (p.link) {
-                document.getElementById('modal-link').href = p.link;
+                ml.href = p.link;
                 document.getElementById('modal-link-label').textContent = p.linkLabel || 'Buka Website';
+                ml.classList.remove('hidden');
+                hasAny = true;
+            } else {
+                ml.classList.add('hidden');
+            }
+
+            if (p.github) {
+                mg.href = p.github;
+                mg.classList.remove('hidden');
+                hasAny = true;
+            } else {
+                mg.classList.add('hidden');
+            }
+
+            if (hasAny) {
                 lw.classList.remove('hidden');
             } else {
                 lw.classList.add('hidden');
