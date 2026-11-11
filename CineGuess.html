@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CineGuess — Tebak Film Favorit & Koleksi Poster Bioskop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,300;0,400;0,700;1,400&family=Gaegu:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: #090a0f;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(234, 179, 8, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(225, 29, 72, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 10% 80%, rgba(59, 130, 246, 0.04) 0%, transparent 40%);
+        }
+        .font-serif { font-family: 'Noto Serif', serif; }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .font-cute { font-family: 'Gaegu', cursive; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+
+        /* Cinema Glows & Cards */
+        .gold-glow {
+            box-shadow: 0 0 40px -10px rgba(234, 179, 8, 0.35);
+        }
+        .gold-border {
+            border: 1px solid rgba(234, 179, 8, 0.35);
+        }
+        .cinema-card {
+            background: linear-gradient(145deg, rgba(24, 26, 36, 0.85) 0%, rgba(13, 14, 21, 0.95) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+        }
+        .cinema-card:hover {
+            border-color: rgba(234, 179, 8, 0.3);
+        }
+
+        /* Movie Poster Blur State */
+        .poster-blurred {
+            filter: blur(28px) grayscale(70%) brightness(0.25) contrast(120%);
+            transform: scale(1.08);
+            transition: filter 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .poster-hint {
+            filter: blur(14px) grayscale(40%) brightness(0.45);
+            transform: scale(1.04);
+            transition: filter 0.6s ease, transform 0.6s ease;
+        }
+        .poster-revealed {
+            filter: blur(0px) grayscale(0%) brightness(1) contrast(100%);
+            transform: scale(1);
+            transition: filter 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Perforated Film Strip Edge */
+        .film-perforation {
+            background-image: radial-gradient(circle, #090a0f 35%, transparent 40%);
+            background-size: 16px 16px;
+            background-repeat: repeat-y;
+        }
+
+        /* Option Card Animations */
+        .option-btn {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            border-color: rgba(234, 179, 8, 0.7);
+            background: rgba(234, 179, 8, 0.08);
+        }
+        .option-btn.correct {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.4) 100%) !important;
+            border-color: #10b981 !important;
+            color: #34d399 !important;
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+        }
+        .option-btn.wrong {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.4) 100%) !important;
+            border-color: #ef4444 !important;
+            color: #f87171 !important;
+            animation: shake 0.45s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(4px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+            40%, 60% { transform: translate3d(6px, 0, 0); }
+        }
+
+        /* Clapperboard strip */
+        .clapper-stripes {
+            background: repeating-linear-gradient(
+                -45deg,
+                #18181b,
+                #18181b 12px,
+                #ffffff 12px,
+                #ffffff 24px
+            );
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #090a0f; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #eab308; }
+    </style>
+</head>
+<body class="selection:bg-amber-400 selection:text-black min-h-screen flex flex-col justify-between">
+
+    <!-- Top Navigation -->
+    <header class="border-b border-white/10 bg-black/60 backdrop-blur-xl sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="Portofolio.html" class="flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors text-xs font-mono uppercase tracking-widest border border-white/10 hover:border-white/30 px-3 py-1.5 rounded-full bg-white/5">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                    <span>Portofolio</span>
+                </a>
+                <div class="h-4 w-px bg-white/10 hidden sm:block"></div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-black font-black text-sm shadow-lg shadow-amber-500/20">
+                        🎬
+                    </div>
+                    <div>
+                        <span class="font-cinzel text-lg sm:text-xl font-bold tracking-wider text-white">CINE<span class="text-amber-400">GUESS</span></span>
+                        <span class="hidden sm:inline-block ml-2 text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-amber-400/10 text-amber-300 border border-amber-400/20">Studio Edition</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Controls: Sound, Collection, Score -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- Sound Toggle -->
+                <button id="sound-btn" onclick="toggleSound()" class="p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors" title="Toggle Suara">
+                    <span id="sound-icon" class="material-symbols-outlined text-xl">volume_up</span>
+                </button>
+
+                <!-- Collection Drawer Button -->
+                <button onclick="openCollectionModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 hover:border-amber-400/40 bg-white/5 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-300 transition-all text-xs font-mono uppercase tracking-wider">
+                    <span class="material-symbols-outlined text-base text-amber-400">local_activity</span>
+                    <span class="hidden sm:inline">Koleksi:</span>
+                    <span id="header-collection-count" class="font-bold text-amber-400">0/18</span>
+                </button>
+
+                <!-- Streak badge -->
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold">
+                    <span>🔥</span>
+                    <span id="streak-count">0</span>
+                    <span class="hidden sm:inline text-amber-400/70 text-[10px]">STREAK</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Game Container -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex-grow w-full">
+
+        <!-- Top Game Bar: Lives, Round, Score, Mode -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+            <!-- Round / Progress -->
+            <div class="cinema-card rounded-2xl p-3.5 sm:p-4 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-amber-400">
+                    <span class="material-symbols-outlined text-xl">movie</span>
+                </div>
+                <div>
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-zinc-400 block">Film Ke</span>
+                    <div class="text-base sm:text-lg font-bold font-mono text-white">
+                        <span id="current-round-text">1</span> <span class="text-xs text-zinc-500">/ <span id="total-rounds-text">18</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lives (Film Reels) -->
+            <div class="cinema-card rounded-2xl p-3.5 sm:p-4 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+                    <span class="material-symbols-outlined text-xl">favorite</span>
+                </div>
+                <div>
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-zinc-400 block">Kesempatan</span>
+                    <div id="lives-container" class="flex items-center gap-1 text-rose-400 text-base">
+                        <span>❤️</span><span>❤️</span><span>❤️</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Score -->
+            <div class="cinema-card rounded-2xl p-3.5 sm:p-4 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                    <span class="material-symbols-outlined text-xl">military_tech</span>
+                </div>
+                <div>
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-zinc-400 block">Total Poin</span>
+                    <div class="text-base sm:text-lg font-bold font-mono text-amber-400">
+                        <span id="score-text">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mode Selector -->
+            <div class="cinema-card rounded-2xl p-2.5 sm:p-3 flex items-center justify-between">
+                <button id="mode-pilihan-btn" onclick="setMode('choice')" class="flex-1 py-2 px-2 text-center rounded-xl text-xs font-mono font-medium transition-all bg-amber-400 text-black font-bold">
+                    Pilihan Ganda
+                </button>
+                <button id="mode-ketik-btn" onclick="setMode('type')" class="flex-1 py-2 px-2 text-center rounded-xl text-xs font-mono font-medium text-zinc-400 hover:text-white transition-all">
+                    Ketik Judul
+                </button>
+            </div>
+        </div>
+
+        <!-- Cinema Screen Arena -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+            <!-- Kolom Kiri: Poster Bioskop (Misterius -> Terbuka) -->
+            <div class="lg:col-span-5 flex flex-col items-center">
+                <!-- Frame Poster Bioskop -->
+                <div class="w-full max-w-sm cinema-card rounded-3xl p-3 sm:p-4 gold-border gold-glow relative overflow-hidden group">
+                    <!-- Clapperboard Accent Top -->
+                    <div class="h-3 w-full clapper-stripes rounded-t-xl mb-3 opacity-80"></div>
+
+                    <!-- Poster Container with Spotlight -->
+                    <div class="relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-zinc-950 flex items-center justify-center border border-white/10 shadow-2xl">
+                        <!-- Poster Image -->
+                        <img id="movie-poster" 
+                             src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" 
+                             alt="Poster Film Misterius" 
+                             class="w-full h-full object-cover poster-blurred"
+                             onload="onPosterLoaded()"
+                             onerror="onPosterError()"/>
+
+                        <!-- Secret Overlay Silhouette / Lock -->
+                        <div id="poster-lock-badge" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-black/40 backdrop-blur-[2px] transition-opacity duration-500">
+                            <div class="w-16 h-16 rounded-full bg-black/80 border border-amber-400/40 flex items-center justify-center text-amber-400 shadow-2xl shadow-amber-400/20 mb-3 animate-pulse">
+                                <span class="material-symbols-outlined text-3xl">lock</span>
+                            </div>
+                            <span class="font-cinzel text-xs font-bold uppercase tracking-widest text-amber-200/90 mb-1">Poster Terkunci</span>
+                            <p class="text-[11px] text-zinc-400 max-w-[200px]">Tebak judul film dengan benar untuk membuka poster resmi & trivia lengkap!</p>
+                        </div>
+
+                        <!-- Reveal Banner Overlay (Appears on Win) -->
+                        <div id="poster-reveal-banner" class="hidden absolute top-4 right-4 z-10 bg-amber-400 text-black px-3 py-1 rounded-full text-xs font-cinzel font-black tracking-wider uppercase shadow-lg flex items-center gap-1 animate-bounce">
+                            <span>★</span> POSTER REVEALED
+                        </div>
+
+                        <!-- Fallback Poster Placeholder if offline -->
+                        <div id="poster-fallback" class="hidden absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-zinc-900 text-zinc-400">
+                            <span class="material-symbols-outlined text-6xl text-amber-400/50 mb-3">movie</span>
+                            <p id="poster-fallback-title" class="font-cinzel text-lg font-bold text-white mb-1"></p>
+                            <p class="text-xs font-mono text-zinc-500">Poster resmi siap ditampilkan</p>
+                        </div>
+                    </div>
+
+                    <!-- Hint peek button underneath poster -->
+                    <div class="mt-3 flex items-center justify-between px-1">
+                        <button id="peek-hint-btn" onclick="peekPosterHint()" class="text-xs font-mono text-zinc-400 hover:text-amber-400 flex items-center gap-1.5 transition-colors py-1 px-2 rounded-lg hover:bg-white/5">
+                            <span class="material-symbols-outlined text-sm">visibility</span>
+                            <span>Intip Sedikit Poster (-10 Poin)</span>
+                        </button>
+                        <span id="peek-badge" class="hidden text-[10px] font-mono text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">Intip Aktif</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan: Clue & Teka-teki & Area Tebakan -->
+            <div class="lg:col-span-7 flex flex-col gap-6">
+
+                <!-- Kartu Petunjuk Teka-Teki (Cinema Clue Card) -->
+                <div class="cinema-card rounded-3xl p-6 sm:p-8 relative">
+                    <!-- Film Strip Hole Decorator -->
+                    <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-amber-400 text-lg">psychology_alt</span>
+                            <span class="font-mono text-xs uppercase tracking-widest text-zinc-400">Petunjuk Film</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="movie-genre-badge" class="text-[11px] font-mono font-medium px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-300">Sci-Fi · Petualangan</span>
+                            <span id="movie-year-badge" class="text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300">2014</span>
+                        </div>
+                    </div>
+
+                    <!-- Clue 1: Deretan EMOJI Unik -->
+                    <div class="mb-6">
+                        <span class="text-[11px] font-mono uppercase tracking-widest text-zinc-500 block mb-2">Clue #1: Rangkuman Alur Cerita Dalam Emoji</span>
+                        <div id="movie-emojis" class="text-3xl sm:text-5xl tracking-widest py-3 px-4 rounded-2xl bg-black/50 border border-white/5 inline-block select-none shadow-inner">
+                            ⏳ 🚀 🪐 👨‍👧 🌽
+                        </div>
+                    </div>
+
+                    <!-- Clue 2: Sinopsis Singkat / Riddle -->
+                    <div class="mb-6">
+                        <span class="text-[11px] font-mono uppercase tracking-widest text-zinc-500 block mb-2">Clue #2: Sinopsis Misterius</span>
+                        <p id="movie-riddle" class="font-serif italic text-base sm:text-lg text-zinc-200 leading-relaxed bg-white/[0.02] p-4 rounded-2xl border border-white/5">
+                            "Perjalanan luar angkasa melintasi lubang cacing demi mencari planet baru bagi umat manusia dan kekuatan ikatan cinta seorang ayah melintasi dimensi."
+                        </p>
+                    </div>
+
+                    <!-- Clue 3: Kutipan Ikonik (Unlockable Hint) -->
+                    <div class="pt-2">
+                        <div id="hint-quote-wrapper" class="hidden bg-amber-400/5 border border-amber-400/20 p-4 rounded-2xl">
+                            <span class="text-[10px] font-mono uppercase tracking-widest text-amber-400 block mb-1">💬 Kutipan Ikonik / Dialog Terkenal:</span>
+                            <p id="movie-quote" class="font-serif italic text-sm text-amber-200">
+                                "Do not go gentle into that good night. Rage, rage against the dying of the light."
+                            </p>
+                            <p id="movie-director-hint" class="text-xs font-mono text-zinc-400 mt-2">
+                                Sutradara: <span id="director-text" class="text-white font-medium">Christopher Nolan</span>
+                            </p>
+                        </div>
+                        <button id="unlock-quote-btn" onclick="unlockQuoteHint()" class="flex items-center gap-2 text-xs font-mono text-amber-400 hover:text-amber-300 transition-colors py-2 px-3 rounded-xl border border-amber-400/20 hover:border-amber-400/50 bg-amber-400/5">
+                            <span class="material-symbols-outlined text-sm">lightbulb</span>
+                            <span>Buka Petunjuk Kutipan & Sutradara (-15 Poin)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Input / Pilihan Jawaban -->
+                <div class="cinema-card rounded-3xl p-6 sm:p-8">
+                    <!-- Heading -->
+                    <div class="flex items-center justify-between mb-5">
+                        <span class="font-cinzel text-xs font-bold uppercase tracking-widest text-amber-400">Pilih Jawaban Yang Benar:</span>
+                        <span class="text-[11px] font-mono text-zinc-500 hidden sm:inline">Shortcut Keyboard: Tekan angka 1, 2, 3, 4</span>
+                    </div>
+
+                    <!-- Mode Pilihan Ganda -->
+                    <div id="choice-mode-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <button onclick="handleGuessOption(0)" id="opt-0" class="option-btn p-4 rounded-2xl bg-white/5 border border-white/10 text-left font-serif text-sm sm:text-base text-zinc-200 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center font-mono text-xs font-bold text-zinc-400">1</span>
+                                <span class="opt-title font-medium text-white">Interstellar</span>
+                            </div>
+                            <span class="material-symbols-outlined text-sm text-zinc-500">arrow_forward</span>
+                        </button>
+                        <button onclick="handleGuessOption(1)" id="opt-1" class="option-btn p-4 rounded-2xl bg-white/5 border border-white/10 text-left font-serif text-sm sm:text-base text-zinc-200 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center font-mono text-xs font-bold text-zinc-400">2</span>
+                                <span class="opt-title font-medium text-white">The Martian</span>
+                            </div>
+                            <span class="material-symbols-outlined text-sm text-zinc-500">arrow_forward</span>
+                        </button>
+                        <button onclick="handleGuessOption(2)" id="opt-2" class="option-btn p-4 rounded-2xl bg-white/5 border border-white/10 text-left font-serif text-sm sm:text-base text-zinc-200 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center font-mono text-xs font-bold text-zinc-400">3</span>
+                                <span class="opt-title font-medium text-white">Gravity</span>
+                            </div>
+                            <span class="material-symbols-outlined text-sm text-zinc-500">arrow_forward</span>
+                        </button>
+                        <button onclick="handleGuessOption(3)" id="opt-3" class="option-btn p-4 rounded-2xl bg-white/5 border border-white/10 text-left font-serif text-sm sm:text-base text-zinc-200 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center font-mono text-xs font-bold text-zinc-400">4</span>
+                                <span class="opt-title font-medium text-white">Ad Astra</span>
+                            </div>
+                            <span class="material-symbols-outlined text-sm text-zinc-500">arrow_forward</span>
+                        </button>
+                    </div>
+
+                    <!-- Mode Ketik Langsung (Autocomplete) -->
+                    <div id="type-mode-container" class="hidden">
+                        <form onsubmit="handleTypeSubmit(event)" class="space-y-4">
+                            <div class="relative">
+                                <input id="type-input" 
+                                       type="text" 
+                                       placeholder="Ketik judul film (cth: Interstellar, Inception...)" 
+                                       autocomplete="off"
+                                       class="w-full bg-black/60 border border-white/20 focus:border-amber-400 px-5 py-4 rounded-2xl text-white font-serif placeholder:font-sans placeholder:italic placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-amber-400/20 text-base"/>
+                                <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-cinzel font-bold text-xs uppercase tracking-wider transition-all shadow-md">
+                                    Tebak!
+                                </button>
+                            </div>
+                            <!-- Live Suggestions dropdown -->
+                            <div id="autocomplete-list" class="hidden bg-zinc-900 border border-white/10 rounded-2xl p-2 max-h-48 overflow-y-auto space-y-1 shadow-2xl">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Feedback Banner -->
+                    <div id="result-feedback" class="hidden mt-6 p-5 rounded-2xl transition-all">
+                        <div class="flex items-start gap-4">
+                            <div id="feedback-icon-box" class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+                                <span id="feedback-icon" class="material-symbols-outlined text-2xl">check_circle</span>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center justify-between">
+                                    <h4 id="feedback-title" class="font-cinzel text-lg font-bold text-white">TEBAKAN TEPAT! 🎬</h4>
+                                    <span id="feedback-points" class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">+100 Poin</span>
+                                </div>
+                                <p id="feedback-desc" class="text-sm text-zinc-300 mt-1 font-serif"></p>
+                                <!-- Trivia & Rating Badge -->
+                                <div id="feedback-meta" class="flex flex-wrap items-center gap-3 mt-3 pt-3 border-t border-white/10 text-xs font-mono text-zinc-400">
+                                    <span class="flex items-center gap-1 text-amber-400"><span class="material-symbols-outlined text-sm">star</span> <span id="feedback-rating">8.7/10</span></span>
+                                    <span>•</span>
+                                    <span id="feedback-director">Christopher Nolan</span>
+                                    <span>•</span>
+                                    <span id="feedback-awards" class="text-amber-300">🏆 Pemenang Piala Oscar</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Lanjut Film Berikutnya -->
+                        <div class="mt-4 pt-3 flex justify-end">
+                            <button id="next-movie-btn" onclick="nextRound()" class="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-cinzel font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-2 shadow-lg shadow-amber-400/20">
+                                <span>Film Berikutnya</span>
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Koleksi Poster Film (Ticket Album) -->
+    <div id="collection-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-white/10 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-white/10 flex items-center justify-between bg-black/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
+                        <span class="material-symbols-outlined text-xl">local_activity</span>
+                    </div>
+                    <div>
+                        <h3 class="font-cinzel text-xl font-bold text-white">Album Tiket & Koleksi Poster</h3>
+                        <p class="text-xs font-mono text-zinc-400">Daftar seluruh poster film resmi yang telah Anda buka</p>
+                    </div>
+                </div>
+                <button onclick="closeCollectionModal()" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+            </div>
+
+            <!-- Modal Body: Posters Grid -->
+            <div id="collection-grid" class="p-6 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 flex-grow">
+                <!-- Dynamically generated tickets & posters -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-white/10 bg-black/60 flex items-center justify-between">
+                <span class="text-xs font-mono text-zinc-400">Tersimpan otomatis di browser lokal (LocalStorage)</span>
+                <button onclick="shareScore()" class="px-5 py-2.5 rounded-xl bg-amber-400 text-black font-cinzel text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 hover:bg-amber-300 transition-all">
+                    <span class="material-symbols-outlined text-sm">share</span>
+                    <span>Bagikan Skor</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over / Victory Modal -->
+    <div id="gameover-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-lg hidden items-center justify-center p-4">
+        <div class="cinema-card border border-amber-400/30 rounded-3xl max-w-md w-full p-8 text-center gold-glow">
+            <div id="gameover-emoji" class="text-6xl mb-4">🏆</div>
+            <h3 id="gameover-title" class="font-cinzel text-2xl font-bold text-white mb-2">PENGHARGAAN CINEPHILE!</h3>
+            <p id="gameover-desc" class="text-sm text-zinc-400 font-serif mb-6 leading-relaxed">
+                Luar biasa! Pengetahuan sinematik Anda sungguh mengesankan. Seluruh tiket bioskop berhasil Anda koleksi.
+            </p>
+
+            <!-- Score Summary Card -->
+            <div class="bg-black/50 border border-white/10 rounded-2xl p-4 mb-6 grid grid-cols-2 gap-4">
+                <div>
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-zinc-500 block">Skor Akhir</span>
+                    <span id="final-score" class="font-mono text-2xl font-bold text-amber-400">0</span>
+                </div>
+                <div>
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-zinc-500 block">Film Ditebak</span>
+                    <span id="final-guessed" class="font-mono text-2xl font-bold text-white">0</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="restartGame()" class="flex-1 py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-cinzel font-bold text-xs uppercase tracking-wider transition-all">
+                    Main Lagi 🔄
+                </button>
+                <button onclick="openCollectionModal()" class="flex-1 py-3 px-4 rounded-xl border border-white/20 hover:border-white/50 text-white font-cinzel text-xs font-bold uppercase tracking-wider transition-all">
+                    Lihat Koleksi 🎟️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-zinc-900 border border-amber-400/30 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-24 transition-transform duration-300">
+        <span class="material-symbols-outlined text-amber-400" id="toast-icon">info</span>
+        <span class="text-xs font-mono" id="toast-msg">Pesan notifikasi</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 py-6 mt-12 bg-black/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
+            <div class="flex items-center gap-2">
+                <span>© 2026 CineGuess Studio — Bagian dari Portofolio</span>
+                <a href="About.html" class="text-zinc-400 hover:text-white underline">Abdul Hakim Nur</a>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="Portofolio.html" class="hover:text-amber-400 transition-colors">Portofolio Utama</a>
+                <a href="https://github.com/Kimdeadcartney" target="_blank" class="hover:text-amber-400 transition-colors">GitHub</a>
+                <a href="Kontak.html" class="hover:text-amber-400 transition-colors">Kontak</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Game Scripts -->
+    <script>
+        /* ── Database 18 Masterpiece Movies ── */
+        const MOVIE_DATABASE = [
+            {
+                id: 'interstellar',
+                title: 'Interstellar',
+                year: '2014',
+                genre: 'Sci-Fi · Petualangan · Drama',
+                director: 'Christopher Nolan',
+                rating: '8.7 / 10',
+                awards: '🏆 Pemenang 1 Piala Oscar',
+                poster: 'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
+                emojis: '⏳ 🚀 🪐 👨‍👧 🌽 🕳️',
+                riddle: 'Perjalanan luar angkasa melintasi lubang cacing (wormhole) demi mencari planet baru bagi umat manusia dan kekuatan ikatan cinta seorang ayah melintasi dimensi gravitasi.',
+                quote: 'Do not go gentle into that good night. Rage, rage against the dying of the light.',
+                decoys: ['The Martian', 'Gravity', 'Ad Astra']
+            },
+            {
+                id: 'inception',
+                title: 'Inception',
+                year: '2010',
+                genre: 'Sci-Fi · Aksi · Heist',
+                director: 'Christopher Nolan',
+                rating: '8.8 / 10',
+                awards: '🏆 Pemenang 4 Piala Oscar',
+                poster: 'https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg',
+                emojis: '🌀 🛌 💤 💭 ⏳ 💼',
+                riddle: 'Sekelompok pencuri ulung menyusup ke alam bawah sadar targetnya melalui mimpi di dalam mimpi untuk menanamkan ide rahasia menggunakan totem gasing.',
+                quote: 'An idea is like a virus. Resilient. Highly contagious.',
+                decoys: ['Shutter Island', 'Tenet', 'Memento']
+            },
+            {
+                id: 'dark_knight',
+                title: 'The Dark Knight',
+                year: '2008',
+                genre: 'Aksi · Kejahatan · Drama',
+                director: 'Christopher Nolan',
+                rating: '9.0 / 10',
+                awards: '🏆 Pemenang 2 Piala Oscar (Heath Ledger)',
+                poster: 'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
+                emojis: '🦇 🃏 🏙️ 🤡 💥 🎭',
+                riddle: 'Pahlawan bertopeng kelelawar di kota Gotham diuji batas moral dan ketahanannya oleh agen kekacauan berwajah badut anarkis yang tak kenal ampun.',
+                quote: 'Why so serious?',
+                decoys: ['The Batman', 'Joker', 'Iron Man']
+            },
+            {
+                id: 'spirited_away',
+                title: 'Spirited Away',
+                year: '2001',
+                genre: 'Animasi · Fantasi · Petualangan',
+                director: 'Hayao Miyazaki (Studio Ghibli)',
+                rating: '8.6 / 10',
+                awards: '🏆 Pemenang Oscar Best Animated Feature',
+                poster: 'https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg',
+                emojis: '👧 🏮 ♨️ 🐉 🐷 ⛩️',
+                riddle: 'Gadis berusia 10 tahun terjebak di dunia roh pemandian air panas setelah orang tuanya berubah menjadi babi karena memakan makanan para dewa.',
+                quote: 'Once you have met someone, you never really forget them.',
+                decoys: ['My Neighbor Totoro', 'Princess Mononoke', 'Howls Moving Castle']
+            },
+            {
+                id: 'parasite',
+                title: 'Parasite',
+                year: '2019',
+                genre: 'Thriller · Komedi Gelap · Drama',
+                director: 'Bong Joon-ho',
+                rating: '8.5 / 10',
+                awards: '🏆 Pemenang 4 Piala Oscar Termasuk Best Picture',
+                poster: 'https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg',
+                emojis: '🪨 🏠 👨‍👩‍👧‍👦 ☔ 🍜 🩸',
+                riddle: 'Keluarga miskin yang tinggal di semi-basement satu per satu menyamar dengan cerdik untuk bekerja di rumah konglomerat hingga rahasia bunker bawah tanah meledak.',
+                quote: 'You know what kind of plan never fails? No plan at all.',
+                decoys: ['Train to Busan', 'Oldboy', 'Memories of Murder']
+            },
+            {
+                id: 'spider_verse',
+                title: 'Spider-Man: Into the Spider-Verse',
+                year: '2018',
+                genre: 'Animasi · Aksi · Sci-Fi',
+                director: 'Bob Persichetti & Peter Ramsey',
+                rating: '8.4 / 10',
+                awards: '🏆 Pemenang Oscar Best Animated Feature',
+                poster: 'https://image.tmdb.org/t/p/w500/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg',
+                emojis: '🕷️ 🕸️ 🎧 👟 🏙️ 🎨',
+                riddle: 'Remaja Brooklyn bernama Miles Morales digigit laba-laba radioaktif dan harus belajar menjadi pahlawan bersama varian Spider-Man dari lintas semesta dimensi lain.',
+                quote: "That's all it is, Miles. A leap of faith.",
+                decoys: ['Spider-Man: No Way Home', 'Big Hero 6', 'The Incredibles']
+            },
+            {
+                id: 'oppenheimer',
+                title: 'Oppenheimer',
+                year: '2023',
+                genre: 'Biografi · Drama · Sejarah',
+                director: 'Christopher Nolan',
+                rating: '8.9 / 10',
+                awards: '🏆 Pemenang 7 Piala Oscar Termasuk Best Picture',
+                poster: 'https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg',
+                emojis: '💣 ⚛️ 🔥 🇺🇸 ⏳ 📻',
+                riddle: 'Kisah fisikawan teoretis yang memimpin Proyek Manhattan di Los Alamos untuk merancang dan meledakkan senjata bom atom pertama dalam sejarah umat manusia.',
+                quote: 'Now I am become Death, the destroyer of worlds.',
+                decoys: ['A Beautiful Mind', 'The Imitation Game', 'Dunkirk']
+            },
+            {
+                id: 'coco',
+                title: 'Coco',
+                year: '2017',
+                genre: 'Animasi · Musik · Fantasi',
+                director: 'Lee Unkrich (Pixar)',
+                rating: '8.4 / 10',
+                awards: '🏆 Pemenang 2 Piala Oscar (Best Song "Remember Me")',
+                poster: 'https://image.tmdb.org/t/p/w500/6Ryitt95xrO8KXuqRGm1fUuNwqF.jpg',
+                emojis: '🎸 💀 🌼 🇲🇽 🐕 🎶',
+                riddle: 'Bocah pemetik gitar yang dilarang bermusik oleh keluarganya secara ajaib terlempar ke Negeri Orang Mati saat festival Día de los Muertos.',
+                quote: 'Remember me though I have to say goodbye...',
+                decoys: ['Soul', 'The Book of Life', 'Encanto']
+            },
+            {
+                id: 'whiplash',
+                title: 'Whiplash',
+                year: '2014',
+                genre: 'Drama · Musik',
+                director: 'Damien Chazelle',
+                rating: '8.5 / 10',
+                awards: '🏆 Pemenang 3 Piala Oscar',
+                poster: 'https://image.tmdb.org/t/p/w500/7fn624j5lj3xTme2SgiLCeuedmO.jpg',
+                emojis: '🥁 🩸 🎺 🎵 😡 🖐️',
+                riddle: 'Ambisi membara seorang pemain drum jazz muda di akademi musik bergengsi yang didorong hingga batas kewarasan oleh instruktur brutal yang melempar kursi ke arahnya.',
+                quote: "There are no two words in the English language more harmful than 'good job'.",
+                decoys: ['Black Swan', 'La La Land', 'The Pianist']
+            },
+            {
+                id: 'la_la_land',
+                title: 'La La Land',
+                year: '2016',
+                genre: 'Komedi · Drama · Musikal',
+                director: 'Damien Chazelle',
+                rating: '8.0 / 10',
+                awards: '🏆 Pemenang 6 Piala Oscar',
+                poster: 'https://image.tmdb.org/t/p/w500/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg',
+                emojis: '🎹 💃 🕺 🌆 🎷 🌟',
+                riddle: 'Romansa memikat antara seorang pianis jazz idealis dan calon aktris yang berjuang menggapai mimpi mereka di bawah gemerlap cahaya kota Los Angeles.',
+                quote: "Here's to the ones who dream, foolish as they may seem.",
+                decoys: ['The Greatest Showman', 'A Star Is Born', 'Midnight in Paris']
+            },
+            {
+                id: 'matrix',
+                title: 'The Matrix',
+                year: '1999',
+                genre: 'Aksi · Sci-Fi',
+                director: 'Lana & Lilly Wachowski',
+                rating: '8.7 / 10',
+                awards: '🏆 Pemenang 4 Piala Oscar',
+                poster: 'https://image.tmdb.org/t/p/w500/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg',
+                emojis: '🕶️ 💊 🟢 💻 🥋 🔫',
+                riddle: 'Seorang hacker bernama Neo diberi pilihan pil merah atau biru dan tersadar bahwa kenyataan yang selama ini ia jalani hanyalah simulasi ilusi komputer.',
+                quote: 'You take the blue pill, the story ends. You take the red pill, you stay in Wonderland.',
+                decoys: ['Blade Runner 2049', 'Minority Report', 'I, Robot']
+            },
+            {
+                id: 'titanic',
+                title: 'Titanic',
+                year: '1997',
+                genre: 'Drama · Romantis',
+                director: 'James Cameron',
+                rating: '7.9 / 10',
+                awards: '🏆 Pemenang 11 Piala Oscar Rekor Bersejarah',
+                poster: 'https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg',
+                emojis: '🚢 🧊 💎 🌊 🎻 🎨',
+                riddle: 'Kisah cinta epik beda kasta antara Jack dan Rose di atas kapal megah yang tak bisa tenggelam sebelum menabrak gunung es di Samudra Atlantik.',
+                quote: "I'm the king of the world!",
+                decoys: ['The Notebook', 'Pearl Harbor', 'Avatar']
+            },
+            {
+                id: 'pulp_fiction',
+                title: 'Pulp Fiction',
+                year: '1994',
+                genre: 'Kejahatan · Drama',
+                director: 'Quentin Tarantino',
+                rating: '8.9 / 10',
+                awards: '🏆 Pemenang Oscar Best Original Screenplay & Palme d’Or',
+                poster: 'https://image.tmdb.org/t/p/w500/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg',
+                emojis: '🍔 💼 🕶️ 🔫 🕺 💃',
+                riddle: 'Jalinan kisah kriminal non-linear di Los Angeles melibatkan dua pembunuh bayaran berkoper misterius, petinju yang menolak kalah, dan aksi menari twist ikonik.',
+                quote: "Say 'what' again, I dare you, I double dare you!",
+                decoys: ['Reservoir Dogs', 'Goodfellas', 'Fargo']
+            },
+            {
+                id: 'fight_club',
+                title: 'Fight Club',
+                year: '1999',
+                genre: 'Drama · Thriller Psikologis',
+                director: 'David Fincher',
+                rating: '8.8 / 10',
+                awards: '🏆 Film Kultus Sinema Abad 20',
+                poster: 'https://image.tmdb.org/t/p/w500/jSziioSwPVrOy9Yow3XhWIBDjq1.jpg',
+                emojis: '🧼 🥊 🏢 👥 👔 💥',
+                riddle: 'Pria pekerja kantoran yang menderita insomnia kronis bertemu penjual sabun eksentrik bernama Tyler Durden dan mendirikan perkumpulan rahasia perkelahian bawah tanah.',
+                quote: 'The first rule of Fight Club is: you do not talk about Fight Club.',
+                decoys: ['American Psycho', 'Se7en', 'Taxi Driver']
+            },
+            {
+                id: 'your_name',
+                title: 'Your Name (Kimi no Na wa)',
+                year: '2016',
+                genre: 'Animasi · Romantis · Fantasi',
+                director: 'Makoto Shinkai',
+                rating: '8.4 / 10',
+                awards: '🏆 Fenomena Anime Global Terlaris',
+                poster: 'https://image.tmdb.org/t/p/w500/vfJFJPepRKapMd5G2ro7klIRysq.jpg',
+                emojis: '☄️ 🎀 📱 🌄 ⛩️ 🔁',
+                riddle: 'Dua remaja (laki-laki di Tokyo dan perempuan di desa pedalaman) tiba-tiba saling bertukar tubuh secara misterius menjelang melintasnya komet langka.',
+                quote: 'Treasure the experience. Dreams fade away after you wake up.',
+                decoys: ['Weathering with You', 'Suzume', 'A Silent Voice']
+            },
+            {
+                id: 'pengabdi_setan',
+                title: 'Pengabdi Setan',
+                year: '2017',
+                genre: 'Horor · Misteri',
+                director: 'Joko Anwar',
+                rating: '7.4 / 10',
+                awards: '🏆 Pemenang 7 Piala Citra FFI',
+                poster: 'https://image.tmdb.org/t/p/w500/k16xOaI9x5fqepxVwBwUJAozsW8.jpg',
+                emojis: '🔔 👵 🏚️ 🕯️ ⚰️ 👻',
+                riddle: 'Setelah sang ibu yang lama sakit misterius meninggal dunia, teror gemerincing lonceng bergema kembali dan rahasia kelam perjanjian sekte kesuburan terungkap.',
+                quote: 'Ibu datang lagi...',
+                decoys: ['Perempuan Tanah Jahanam', 'Kuntilanak', 'Ratu Ilmu Hitam']
+            },
+            {
+                id: 'laskar_pelangi',
+                title: 'Laskar Pelangi',
+                year: '2008',
+                genre: 'Drama · Inspiratif · Keluarga',
+                director: 'Riri Riza',
+                rating: '7.8 / 10',
+                awards: '🏆 Film Indonesia Terlaris & Fenomenal',
+                poster: 'https://image.tmdb.org/t/p/w500/qoiVrVK09K7GQfrTnRUcAclu3L.jpg',
+                emojis: '🏫 🚲 🌊 🏖️ 🌈 📚',
+                riddle: 'Perjuangan mengharukan 10 anak di Pulau Belitung untuk tetap bersekolah di sebuah SD Muhammadiyah yang nyaris roboh di bawah bimbingan guru penuh dedikasi.',
+                quote: 'Bermimpilah, karena Tuhan akan memeluk mimpi-mimpimu.',
+                decoys: ['Sang Pemimpi', 'Negeri 5 Menara', 'Garuda di Dadaku']
+            },
+            {
+                id: 'raden_saleh',
+                title: 'Mencuri Raden Saleh',
+                year: '2022',
+                genre: 'Aksi · Kejahatan · Heist',
+                director: 'Angga Dwimas Sasongko',
+                rating: '7.6 / 10',
+                awards: '🏆 Pemenang FFI Rekayasa Visual & Sutradara',
+                poster: 'https://image.tmdb.org/t/p/w500/66yOibmlqxASFoNyEZIORELJqBC.jpg',
+                emojis: '🎨 🚗 💻 🎭 🏛️ 💰',
+                riddle: 'Enam pemuda jenius dengan keahlian berbeda bersekongkol merencanakan pencurian lukisan mahakarya Penangkapan Pangeran Diponegoro yang dijaga ketat di Istana Presiden.',
+                quote: 'Kita bukan pencuri biasa, kita seniman yang merebut kembali hak.',
+                decoys: ['The Big 4', 'Gundala', 'Ben & Jody']
+            }
+        ];
+
+        /* ── Audio Synthesizer (Web Audio API) ── */
+        let audioCtx = null;
+        let isSoundEnabled = true;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSound(type) {
+            if (!isSoundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+
+                if (type === 'correct') {
+                    // Harmonious triumph chord (C - E - G - C)
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
+                        gain.gain.setValueAtTime(0.001, ctx.currentTime + idx * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + idx * 0.08 + 0.02);
+                        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.35);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(ctx.currentTime + idx * 0.08);
+                        osc.stop(ctx.currentTime + idx * 0.08 + 0.4);
+                    });
+                } else if (type === 'wrong') {
+                    // Dissonant low scratch
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(140, ctx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(90, ctx.currentTime + 0.3);
+                    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.32);
+                } else if (type === 'hint') {
+                    // Light gentle chime
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(880, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.28);
+                }
+            } catch (err) {
+                console.log('Audio disabled or blocked', err);
+            }
+        }
+
+        function toggleSound() {
+            isSoundEnabled = !isSoundEnabled;
+            const icon = document.getElementById('sound-icon');
+            if (isSoundEnabled) {
+                icon.textContent = 'volume_up';
+                showToast('volume_up', 'Efek suara bioskop: AKTIF');
+            } else {
+                icon.textContent = 'volume_off';
+                showToast('volume_off', 'Efek suara: MATI');
+            }
+        }
+
+        /* ── Game State ── */
+        let currentMode = 'choice'; // 'choice' or 'type'
+        let currentRound = 0;
+        let score = 0;
+        let streak = 0;
+        let lives = 3;
+        let isRoundAnswered = false;
+        let peekUsed = false;
+        let quoteUsed = false;
+        let shuffledMovies = [];
+        let unlockedMovieIds = [];
+
+        // Load collection from LocalStorage
+        function loadStoredCollection() {
+            try {
+                const stored = localStorage.getItem('cineguess_unlocked_movies');
+                if (stored) {
+                    unlockedMovieIds = JSON.parse(stored);
+                }
+            } catch (e) {
+                unlockedMovieIds = [];
+            }
+            updateCollectionCounter();
+        }
+
+        function saveUnlockedMovie(id) {
+            if (!unlockedMovieIds.includes(id)) {
+                unlockedMovieIds.push(id);
+                try {
+                    localStorage.setItem('cineguess_unlocked_movies', JSON.stringify(unlockedMovieIds));
+                } catch (e) {}
+            }
+            updateCollectionCounter();
+        }
+
+        function updateCollectionCounter() {
+            const countEl = document.getElementById('header-collection-count');
+            if (countEl) {
+                countEl.textContent = `${unlockedMovieIds.length}/${MOVIE_DATABASE.length}`;
+            }
+        }
+
+        /* ── Initializer ── */
+        function initGame() {
+            loadStoredCollection();
+            // Shuffle movies order
+            shuffledMovies = [...MOVIE_DATABASE].sort(() => Math.random() - 0.5);
+            currentRound = 0;
+            score = 0;
+            streak = 0;
+            lives = 3;
+            document.getElementById('total-rounds-text').textContent = shuffledMovies.length;
+            updateScoreUI();
+            updateLivesUI();
+            loadRound(0);
+        }
+
+        /* ── Load a Round ── */
+        function loadRound(index) {
+            if (index >= shuffledMovies.length) {
+                // Game victory!
+                showGameOver(true);
+                return;
+            }
+
+            currentRound = index;
+            isRoundAnswered = false;
+            peekUsed = false;
+            quoteUsed = false;
+
+            const movie = shuffledMovies[index];
+
+            // Update Header & Stats
+            document.getElementById('current-round-text').textContent = index + 1;
+
+            // Clues UI
+            document.getElementById('movie-genre-badge').textContent = movie.genre;
+            document.getElementById('movie-year-badge').textContent = movie.year;
+            document.getElementById('movie-emojis').textContent = movie.emojis;
+            document.getElementById('movie-riddle').textContent = `"${movie.riddle}"`;
+            document.getElementById('movie-quote').textContent = `"${movie.quote}"`;
+            document.getElementById('director-text').textContent = movie.director;
+
+            // Reset Clues State
+            document.getElementById('hint-quote-wrapper').classList.add('hidden');
+            document.getElementById('unlock-quote-btn').classList.remove('hidden');
+            document.getElementById('peek-badge').classList.add('hidden');
+
+            // Reset Poster to Blurred State
+            const posterImg = document.getElementById('movie-poster');
+            posterImg.className = 'w-full h-full object-cover poster-blurred';
+            posterImg.src = movie.poster;
+
+            document.getElementById('poster-lock-badge').style.opacity = '1';
+            document.getElementById('poster-reveal-banner').classList.add('hidden');
+            document.getElementById('poster-fallback').classList.add('hidden');
+
+            // Reset Feedback Box
+            document.getElementById('result-feedback').classList.add('hidden');
+
+            // Build Options for Choice Mode
+            setupChoiceOptions(movie);
+
+            // Reset Type Mode
+            const typeInput = document.getElementById('type-input');
+            if (typeInput) typeInput.value = '';
+            document.getElementById('autocomplete-list').classList.add('hidden');
+        }
+
+        function setupChoiceOptions(currentMovie) {
+            // Gather 1 correct + 3 decoys
+            const choices = [currentMovie.title, ...currentMovie.decoys];
+            // Shuffle
+            choices.sort(() => Math.random() - 0.5);
+
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`opt-${i}`);
+                if (btn) {
+                    btn.querySelector('.opt-title').textContent = choices[i];
+                    btn.className = 'option-btn p-4 rounded-2xl bg-white/5 border border-white/10 text-left font-serif text-sm sm:text-base text-zinc-200 flex items-center justify-between cursor-pointer';
+                    btn.disabled = false;
+                    btn.dataset.title = choices[i];
+                }
+            }
+        }
+
+        /* ── Guess Handling ── */
+        function handleGuessOption(index) {
+            if (isRoundAnswered) return;
+            const btn = document.getElementById(`opt-${index}`);
+            if (!btn) return;
+            const selectedTitle = btn.dataset.title;
+            validateGuess(selectedTitle, btn);
+        }
+
+        function handleTypeSubmit(e) {
+            e.preventDefault();
+            if (isRoundAnswered) return;
+            const input = document.getElementById('type-input');
+            const userText = input.value.trim();
+            if (!userText) return;
+            validateGuess(userText, null);
+        }
+
+        function validateGuess(guessedTitle, clickedBtn) {
+            isRoundAnswered = true;
+            const movie = shuffledMovies[currentRound];
+            const isCorrect = normalizeString(guessedTitle) === normalizeString(movie.title);
+
+            if (isCorrect) {
+                // Correct guess!
+                handleWin(movie, clickedBtn);
+            } else {
+                // Wrong guess!
+                handleLose(movie, clickedBtn);
+            }
+        }
+
+        function handleWin(movie, clickedBtn) {
+            playSound('correct');
+
+            // Fire Confetti!
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#eab308', '#f59e0b', '#fbbf24', '#ffffff', '#10b981']
+                });
+            }
+
+            // Unblur Poster with Grand Reveal!
+            const posterImg = document.getElementById('movie-poster');
+            posterImg.className = 'w-full h-full object-cover poster-revealed';
+            document.getElementById('poster-lock-badge').style.opacity = '0';
+            document.getElementById('poster-reveal-banner').classList.remove('hidden');
+
+            // Button style if choice mode
+            if (clickedBtn) {
+                clickedBtn.classList.add('correct');
+            }
+
+            // Disable other buttons
+            disableAllOptions();
+
+            // Calculate points
+            let roundPoints = 100;
+            if (peekUsed) roundPoints -= 10;
+            if (quoteUsed) roundPoints -= 15;
+            streak++;
+            roundPoints += (streak > 1 ? streak * 10 : 0);
+            score += roundPoints;
+
+            updateScoreUI();
+
+            // Save to Collection
+            saveUnlockedMovie(movie.id);
+
+            // Show Feedback
+            showFeedbackCard(true, movie, roundPoints);
+        }
+
+        function handleLose(movie, clickedBtn) {
+            playSound('wrong');
+            lives--;
+            streak = 0;
+            updateScoreUI();
+            updateLivesUI();
+
+            if (clickedBtn) {
+                clickedBtn.classList.add('wrong');
+            }
+
+            // Reveal the correct option in choice mode
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`opt-${i}`);
+                if (btn && normalizeString(btn.dataset.title) === normalizeString(movie.title)) {
+                    btn.classList.add('correct');
+                }
+            }
+            disableAllOptions();
+
+            // Also unblur poster to reveal what it was
+            const posterImg = document.getElementById('movie-poster');
+            posterImg.className = 'w-full h-full object-cover poster-revealed';
+            document.getElementById('poster-lock-badge').style.opacity = '0';
+
+            // Show Feedback
+            showFeedbackCard(false, movie, 0);
+
+            if (lives <= 0) {
+                setTimeout(() => {
+                    showGameOver(false);
+                }, 1800);
+            }
+        }
+
+        function showFeedbackCard(isWin, movie, points) {
+            const card = document.getElementById('result-feedback');
+            const iconBox = document.getElementById('feedback-icon-box');
+            const icon = document.getElementById('feedback-icon');
+            const title = document.getElementById('feedback-title');
+            const desc = document.getElementById('feedback-desc');
+            const pointsEl = document.getElementById('feedback-points');
+
+            card.classList.remove('hidden');
+
+            if (isWin) {
+                card.className = 'mt-6 p-5 rounded-2xl bg-emerald-950/40 border border-emerald-500/30';
+                iconBox.className = 'w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0';
+                icon.textContent = 'check_circle';
+                title.textContent = `TEBAKAN TEPAT! 🎬 (${movie.title})`;
+                title.className = 'font-cinzel text-lg font-bold text-emerald-300';
+                pointsEl.textContent = `+${points} Poin`;
+                pointsEl.className = 'font-mono text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400';
+                desc.textContent = `Luar biasa! Poster resmi film "${movie.title}" (${movie.year}) berhasil terbuka dan ditambahkan ke album koleksi tiket Anda.`;
+            } else {
+                card.className = 'mt-6 p-5 rounded-2xl bg-rose-950/40 border border-rose-500/30';
+                iconBox.className = 'w-12 h-12 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0';
+                icon.textContent = 'cancel';
+                title.textContent = `BELUM TEPAT! Jawaban: ${movie.title}`;
+                title.className = 'font-cinzel text-lg font-bold text-rose-300';
+                pointsEl.textContent = `0 Poin`;
+                pointsEl.className = 'font-mono text-xs font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-400';
+                desc.textContent = `Film yang dimaksud adalah "${movie.title}" (${movie.year}), disutradarai oleh ${movie.director}.`;
+            }
+
+            document.getElementById('feedback-rating').textContent = movie.rating;
+            document.getElementById('feedback-director').textContent = movie.director;
+            document.getElementById('feedback-awards').textContent = movie.awards;
+        }
+
+        function disableAllOptions() {
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`opt-${i}`);
+                if (btn) btn.disabled = true;
+            }
+        }
+
+        function nextRound() {
+            loadRound(currentRound + 1);
+        }
+
+        /* ── Hints ── */
+        function peekPosterHint() {
+            if (isRoundAnswered || peekUsed) return;
+            peekUsed = true;
+            playSound('hint');
+            const posterImg = document.getElementById('movie-poster');
+            posterImg.className = 'w-full h-full object-cover poster-hint';
+            document.getElementById('peek-badge').classList.remove('hidden');
+            showToast('visibility', 'Poster sedikit diintip! (-10 Poin jika benar)');
+        }
+
+        function unlockQuoteHint() {
+            if (isRoundAnswered || quoteUsed) return;
+            quoteUsed = true;
+            playSound('hint');
+            document.getElementById('hint-quote-wrapper').classList.remove('hidden');
+            document.getElementById('unlock-quote-btn').classList.add('hidden');
+            showToast('lightbulb', 'Petunjuk kutipan & sutradara terbuka! (-15 Poin jika benar)');
+        }
+
+        /* ── UI Helpers ── */
+        function updateScoreUI() {
+            document.getElementById('score-text').textContent = score;
+            document.getElementById('streak-count').textContent = streak;
+        }
+
+        function updateLivesUI() {
+            const container = document.getElementById('lives-container');
+            let hearts = '';
+            for (let i = 0; i < 3; i++) {
+                if (i < lives) {
+                    hearts += '<span>❤️</span>';
+                } else {
+                    hearts += '<span class="opacity-30">🖤</span>';
+                }
+            }
+            container.innerHTML = hearts;
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            const choiceBtn = document.getElementById('mode-pilihan-btn');
+            const typeBtn = document.getElementById('mode-ketik-btn');
+            const choiceContainer = document.getElementById('choice-mode-container');
+            const typeContainer = document.getElementById('type-mode-container');
+
+            if (mode === 'choice') {
+                choiceBtn.className = 'flex-1 py-2 px-2 text-center rounded-xl text-xs font-mono font-bold bg-amber-400 text-black shadow-md';
+                typeBtn.className = 'flex-1 py-2 px-2 text-center rounded-xl text-xs font-mono font-medium text-zinc-400 hover:text-white';
+                choiceContainer.classList.remove('hidden');
+                typeContainer.classList.add('hidden');
+            } else {
+                typeBtn.className = 'flex-1 py-2 px-2 text-center rounded-xl text-xs font-mono font-bold bg-amber-400 text-black shadow-md';
+                choiceBtn.className = 'flex-1 py-2 px-2 text-center rounded-xl text-xs font-mono font-medium text-zinc-400 hover:text-white';
+                typeContainer.classList.remove('hidden');
+                choiceContainer.classList.add('hidden');
+                document.getElementById('type-input').focus();
+            }
+        }
+
+        /* ── Autocomplete for Type Mode ── */
+        const typeInputEl = document.getElementById('type-input');
+        const autoListEl = document.getElementById('autocomplete-list');
+
+        if (typeInputEl) {
+            typeInputEl.addEventListener('input', (e) => {
+                const val = e.target.value.toLowerCase().trim();
+                if (!val) {
+                    autoListEl.classList.add('hidden');
+                    return;
+                }
+                const matches = MOVIE_DATABASE.filter(m => m.title.toLowerCase().includes(val));
+                if (matches.length > 0) {
+                    autoListEl.innerHTML = '';
+                    matches.slice(0, 5).forEach(m => {
+                        const item = document.createElement('div');
+                        item.className = 'p-2.5 rounded-xl hover:bg-white/10 cursor-pointer text-sm text-zinc-200 flex items-center justify-between transition-colors';
+                        item.innerHTML = `<span>${m.title}</span> <span class="text-xs text-zinc-500 font-mono">${m.year}</span>`;
+                        item.onclick = () => {
+                            typeInputEl.value = m.title;
+                            autoListEl.classList.add('hidden');
+                        };
+                        autoListEl.appendChild(item);
+                    });
+                    autoListEl.classList.remove('hidden');
+                } else {
+                    autoListEl.classList.add('hidden');
+                }
+            });
+        }
+
+        /* ── Collection Modal (Ticket Album) ── */
+        function openCollectionModal() {
+            const grid = document.getElementById('collection-grid');
+            grid.innerHTML = '';
+
+            MOVIE_DATABASE.forEach(m => {
+                const isUnlocked = unlockedMovieIds.includes(m.id);
+                const card = document.createElement('div');
+                card.className = 'cinema-card rounded-2xl p-2.5 flex flex-col justify-between border border-white/10 group';
+
+                if (isUnlocked) {
+                    card.innerHTML = `
+                        <div class="aspect-[2/3] w-full rounded-xl overflow-hidden mb-2 bg-black relative">
+                            <img src="${m.poster}" alt="${m.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
+                            <div class="absolute top-2 right-2 bg-amber-400 text-black text-[10px] font-mono font-bold px-1.5 py-0.5 rounded">TERBUKA</div>
+                        </div>
+                        <div>
+                            <h5 class="font-cinzel text-xs font-bold text-white truncate">${m.title}</h5>
+                            <p class="text-[10px] font-mono text-zinc-400 truncate">${m.year} · ${m.director}</p>
+                        </div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="aspect-[2/3] w-full rounded-xl mb-2 bg-zinc-900 border border-white/5 flex flex-col items-center justify-center text-zinc-600 p-2 text-center">
+                            <span class="material-symbols-outlined text-3xl mb-1">lock</span>
+                            <span class="text-[10px] font-mono uppercase">Terkunci</span>
+                        </div>
+                        <div>
+                            <h5 class="font-cinzel text-xs font-bold text-zinc-600">???????</h5>
+                            <p class="text-[10px] font-mono text-zinc-700">Tebak di kuis</p>
+                        </div>
+                    `;
+                }
+                grid.appendChild(card);
+            });
+
+            document.getElementById('collection-modal').classList.remove('hidden');
+            document.getElementById('collection-modal').classList.add('flex');
+        }
+
+        function closeCollectionModal() {
+            document.getElementById('collection-modal').classList.add('hidden');
+            document.getElementById('collection-modal').classList.remove('flex');
+        }
+
+        function shareScore() {
+            const shareText = `🎬 Saya berhasil menebak dan membuka ${unlockedMovieIds.length} dari ${MOVIE_DATABASE.length} poster film mahakarya di CineGuess Studio dengan skor ${score}! Coba tebak film favoritmu di sini!`;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    showToast('share', 'Skor berhasil disalin ke papan klip!');
+                });
+            } else {
+                showToast('share', 'Bagikan: ' + shareText);
+            }
+        }
+
+        /* ── Game Over & Restart ── */
+        function showGameOver(isWin) {
+            const modal = document.getElementById('gameover-modal');
+            const emoji = document.getElementById('gameover-emoji');
+            const title = document.getElementById('gameover-title');
+            const desc = document.getElementById('gameover-desc');
+
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('final-guessed').textContent = `${unlockedMovieIds.length}/${MOVIE_DATABASE.length}`;
+
+            if (isWin) {
+                emoji.textContent = '🏆';
+                title.textContent = 'CINEPHILE SUPREME!';
+                desc.textContent = 'Selamat! Anda telah menaklukkan seluruh kuis tebak film dan mengoleksi seluruh poster resmi bioskop.';
+            } else {
+                emoji.textContent = '🎬';
+                title.textContent = 'ROLL FILM BERAKHIR';
+                desc.textContent = 'Kesempatan Anda telah habis, namun Anda berhasil mengoleksi banyak poster keren. Ingin mengulang kembali?';
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function restartGame() {
+            document.getElementById('gameover-modal').classList.add('hidden');
+            document.getElementById('gameover-modal').classList.remove('flex');
+            initGame();
+        }
+
+        /* ── Fallbacks & Image Loaders ── */
+        function onPosterLoaded() {
+            // poster loaded
+        }
+
+        function onPosterError() {
+            // If TMDB image fails or offline, show elegant canvas fallback
+            const fallback = document.getElementById('poster-fallback');
+            const movie = shuffledMovies[currentRound];
+            if (fallback && movie) {
+                document.getElementById('poster-fallback-title').textContent = movie.title;
+                fallback.classList.remove('hidden');
+            }
+        }
+
+        function showToast(iconName, message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-icon').textContent = iconName;
+            document.getElementById('toast-msg').textContent = message;
+            toast.classList.remove('translate-y-24');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24');
+            }, 3000);
+        }
+
+        function normalizeString(str) {
+            return (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        }
+
+        /* ── Keyboard Shortcuts (1, 2, 3, 4) ── */
+        window.addEventListener('keydown', (e) => {
+            if (isRoundAnswered) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    nextRound();
+                }
+                return;
+            }
+            if (currentMode === 'choice') {
+                if (['1', '2', '3', '4'].includes(e.key)) {
+                    const idx = parseInt(e.key) - 1;
+                    handleGuessOption(idx);
+                }
+            }
+        });
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            initGame();
+        });
+    </script>
+</body>
+</html>

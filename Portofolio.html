@@ -199,6 +199,28 @@
         <section class="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 fade-up">
             <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12">
 
+                <!-- CineGuess Studio -->
+                <div class="project-card cursor-pointer group" data-category="web" onclick="openModal('cineguess')">
+                    <div class="aspect-video overflow-hidden mb-4 sm:mb-6 relative bg-zinc-950">
+                        <img src="./img/cineguess.png" alt="CineGuess — Interactive Movie Guessing & Poster Reveal"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onerror="this.style.display='none'"/>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/80">
+                            <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-6 py-3">Lihat Detail</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-2 sm:mb-3">
+                        <h3 style="font-family:'Noto Serif',serif" class="text-xl font-bold">CineGuess — Movie Quiz & Poster Studio</h3>
+                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 ml-4 shrink-0">2026</span>
+                    </div>
+                    <p class="font-sans text-xs tracking-widest uppercase text-zinc-400 mb-2 sm:mb-3">Web Audio API · TMDB CDN · Tailwind · Web App</p>
+                    <p class="text-sm text-zinc-500 leading-relaxed mb-3">Game tebak film interaktif dengan petunjuk emoji & alur cerita, efek unblur poster resmi saat tebakan benar, efek suara synthesizer audio, dan album koleksi tiket.</p>
+                    <div class="flex items-center gap-1 font-sans text-[11px] uppercase tracking-widest text-zinc-400 group-hover:text-black transition-colors">
+                        <span>Lihat Detail</span>
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </div>
+                </div>
+
                 <!-- SnapCraft Photobooth -->
                 <div class="project-card cursor-pointer group" data-category="web" onclick="openModal('snapcraft')">
                     <div class="aspect-video overflow-hidden mb-4 sm:mb-6 relative bg-rose-50">
@@ -617,6 +639,32 @@
 
         /* ── Project Data ── */
         const projects = {
+            cineguess: {
+                title: 'CineGuess — Movie Quiz & Poster Studio',
+                year: '2026',
+                category: 'Web Dev · Interactive Game App',
+                stack: 'Vanilla JavaScript · Web Audio API · Tailwind CSS · TMDB API',
+                desc: 'Aplikasi web interaktif bertema bioskop mewah untuk menebak film favorit melalui petunjuk multi-tahap (kombinasi emoji alur cerita, sinopsis riddle, dan kutipan dialog ikonik). Dilengkapi fitur progressive unblur poster beresolusi tinggi saat tebakan benar, efek suara synthesizer audio real-time, confetti perayaan, serta album koleksi tiket film yang tersimpan di LocalStorage.',
+                features: [
+                    'Sistem tebak film multi-tahap dengan petunjuk emoji unik, sinopsis tersembunyi, kutipan dialog legendaris, dan bocoran sutradara',
+                    'Fitur Progressive Poster Reveal: poster bioskop dimulai dari efek blur siluet hitam dan bertransformasi dramatis menjadi poster 4K jernih saat jawaban tepat',
+                    'Dukungan 2 Mode Interaktif: Pilihan Ganda (Multiple Choice) dengan shortcut angka 1, 2, 3, 4, dan Mode Ketik Judul dengan live autocomplete search',
+                    'Efek Suara Sintetis (Web Audio API): nada kemenangan polifonik, petunjuk hint, dan suara scratch rol film tanpa ketergantungan file audio eksternal',
+                    'Album Koleksi Tiket Bioskop: setiap film yang berhasil ditebak otomatis tersimpan ke album lokal pengguna (LocalStorage)',
+                    'Fitur Bagikan Skor (Share Scorecard) ke media sosial / clipboard instan',
+                    'Database curated 18 film mahakarya dunia (Christopher Nolan, Ghibli, Bong Joon-ho, dll.) dan film terbaik Indonesia (Pengabdi Setan, Laskar Pelangi, Mencuri Raden Saleh)',
+                ],
+                role: 'Full-stack Creative Developer — merancang antarmuka bertema cinema noir luxury, algoritma pencocokan jawaban & normalisasi teks, sintesis audio via Web Audio API, serta integrasi visual poster.',
+                link: 'CineGuess.html',
+                linkLabel: 'Buka CineGuess Studio',
+                github: 'https://github.com/Kimdeadcartney/CineGuess',
+                images: [
+                    { src: './img/cineguess.png', alt: 'CineGuess Studio Interface & Poster Reveal' },
+                ],
+                bg: '#090a0f',
+                icon: 'movie',
+                iconColor: '#eab308',
+            },
             snapcraft: {
                 title: 'SnapCraft — Aesthetic Korean Photobooth Studio',
                 year: '2026',
