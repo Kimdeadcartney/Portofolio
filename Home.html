@@ -80,21 +80,22 @@
         <section class="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 mb-16 sm:mb-24 md:mb-28 fade-up">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end">
                 <div class="md:col-span-8">
-                    <h1 style="font-family:'Noto Serif',serif" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tracking-tighter leading-[1.1] mb-6 sm:mb-8 md:mb-12 break-words">
+                    <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-4">Rekayasa Web & Kreasi Digital</span>
+                    <h1 style="font-family:'Noto Serif',serif" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tracking-tighter leading-[1.08] mb-6 sm:mb-8 md:mb-10 break-words">
                         Abdul Hakim Nur — Fullstack Web Developer
                     </h1>
-                    <p class="text-lg sm:text-xl md:text-2xl text-zinc-500 font-light leading-relaxed max-w-2xl">
-                        Membangun solusi digital yang fungsional sekaligus visual.
+                    <p class="text-lg sm:text-xl md:text-2xl text-zinc-600 font-light leading-relaxed max-w-2xl font-serif">
+                        Merancang solusi perangkat lunak yang berlandaskan logika yang presisi, performa yang andal, dan estetika visual yang berkarakter.
                     </p>
                 </div>
                 <div class="md:col-span-4 flex flex-col items-start md:items-end gap-6">
                     <div class="text-left md:text-right">
-                        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-1">Lokasi</span>
-                        <p style="font-family:'Noto Serif',serif" class="italic text-base sm:text-lg">Surabaya, Indonesia</p>
+                        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-1">Domisili</span>
+                        <p style="font-family:'Noto Serif',serif" class="italic text-base sm:text-lg text-zinc-800">Surabaya, Jawa Timur, ID</p>
                     </div>
                     <a href="Portofolio.html" class="w-full sm:w-auto">
                         <button class="w-full sm:w-auto bg-black text-white px-8 sm:px-10 py-4 text-xs font-sans tracking-widest uppercase hover:bg-zinc-800 transition-all text-center">
-                            Lihat Portofolio →
+                            Lihat Portofolio Lengkap →
                         </button>
                     </a>
                 </div>
@@ -121,54 +122,61 @@
             </div>
         </div>
 
-        <!-- Proyek Pilihan -->
+        <!-- Proyek Pilihan (Dinamis / Berubah Setiap Refresh) -->
         <section class="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 mb-20 sm:mb-28 md:mb-36 fade-up">
-            <div class="flex justify-between items-baseline border-t border-gray-200 pt-8 mb-10 sm:mb-16">
-                <h2 style="font-family:'Noto Serif',serif" class="text-3xl sm:text-4xl tracking-tighter">Proyek Pilihan</h2>
-                <a href="Portofolio.html" class="font-sans text-xs tracking-widest uppercase border-b border-black pb-0.5 hover:text-zinc-400 transition-colors">Lihat Semua</a>
+            <div class="border-t border-gray-200 pt-8 mb-10 sm:mb-14">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-4">
+                    <div>
+                        <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-2">Kurasi Karya Dinamis</span>
+                        <h2 style="font-family:'Noto Serif',serif" class="text-3xl sm:text-4xl md:text-5xl tracking-tighter text-black">
+                            Proyek Pilihan
+                        </h2>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button type="button" onclick="renderRandomProjects()" class="inline-flex items-center gap-1.5 text-xs font-sans tracking-widest uppercase text-zinc-700 hover:text-black border border-zinc-200 hover:border-black px-4 py-2 bg-white transition-all shadow-sm cursor-pointer">
+                            <span class="material-symbols-outlined text-sm">shuffle</span>
+                            <span>Acak Karya ⟳</span>
+                        </button>
+                        <a href="Portofolio.html" class="font-sans text-xs tracking-widest uppercase border-b border-black pb-0.5 hover:text-zinc-400 transition-colors">
+                            Lihat Semua →
+                        </a>
+                    </div>
+                </div>
+                <p class="text-zinc-500 text-sm sm:text-base max-w-2xl font-serif">
+                    Setiap penyegaran laman menampilkan sudut pandang berbeda dari portofolio — mulai dari aplikasi web interaktif, sistem backend institusi, riset algoritma cerdas, hingga kreasi visual.
+                </p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
-                <a href="Portofolio.html" class="group block">
-                    <div class="aspect-video bg-zinc-100 overflow-hidden mb-4 sm:mb-6 relative flex items-center justify-center">
-                        <img src="./img/polda.png" alt="Sistem Informasi Polda" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500"></div>
-                    </div>
-                    <div class="flex justify-between items-start gap-4">
-                        <div>
-                            <h3 style="font-family:'Noto Serif',serif" class="text-xl sm:text-2xl font-bold text-black mb-1 sm:mb-2">Sistem Informasi Polda</h3>
-                            <p class="font-sans text-xs uppercase tracking-widest text-zinc-400">Laravel · MySQL · Backend</p>
-                        </div>
-                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 shrink-0">2025</span>
-                    </div>
-                </a>
-                <a href="Portofolio.html" class="group block">
-                    <div class="aspect-video bg-zinc-100 overflow-hidden mb-4 sm:mb-6 relative flex items-center justify-center">
-                        <img src="./img/aniv.png" alt="Anniversary Website" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500"></div>
-                    </div>
-                    <div class="flex justify-between items-start gap-4">
-                        <div>
-                            <h3 style="font-family:'Noto Serif',serif" class="text-xl sm:text-2xl font-bold text-black mb-1 sm:mb-2">Anniversary Website</h3>
-                            <p class="font-sans text-xs uppercase tracking-widest text-zinc-400">HTML · CSS · JS · Netlify</p>
-                        </div>
-                        <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 shrink-0">2024</span>
-                    </div>
-                </a>
+
+            <!-- Dynamic Featured Projects Grid -->
+            <div id="dynamic-featured-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 transition-opacity duration-300">
+                <!-- Konten proyek dirender dinamis via JavaScript saat refresh -->
             </div>
         </section>
 
-        <!-- Layanan / Fokus -->
+        <!-- Layanan / Filosofi Berkarya -->
         <section class="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 mb-20 sm:mb-28 md:mb-36 fade-up">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-24">
                 <div class="border-t border-gray-200 pt-8">
-                    <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-4 sm:mb-8">Pengembangan Web</span>
-                    <p class="text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 text-zinc-700">Membangun website dari nol — statis maupun sistem database dengan PHP, Laravel, dan MySQL. Kode yang bersih adalah standar, bukan opsi.</p>
-                    <a class="font-sans text-xs tracking-widest uppercase border-b border-black pb-0.5 hover:text-zinc-400 transition-colors" href="About.html">Tentang Saya →</a>
+                    <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-4 sm:mb-6">01 / Rekayasa Perangkat Lunak & Backend</span>
+                    <h3 style="font-family:'Noto Serif',serif" class="text-2xl font-bold mb-4">Struktur Kokoh & Logika Bersih</h3>
+                    <p class="text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 text-zinc-600 font-serif">
+                        Membangun sistem web yang andal dari pondasi — arsitektur backend Laravel & PHP, basis data relasional MySQL teroptimasi, integrasi RESTful API, hingga lingkungan containerization Docker. Prinsip clean code dan performa tinggi adalah standar utama.
+                    </p>
+                    <a class="font-sans text-xs tracking-widest uppercase border-b border-black pb-0.5 hover:text-zinc-400 transition-colors inline-flex items-center gap-1" href="About.html">
+                        <span>Pelajari Latar Belakang</span>
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
                 </div>
                 <div class="border-t border-gray-200 pt-8">
-                    <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-4 sm:mb-8">Ilustrasi & Desain</span>
-                    <p class="text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 text-zinc-700">Menciptakan desain karakter orisinal dan estetika visual interaktif. Memadukan kepekaan seni dengan implementasi teknis antarmuka pengguna.</p>
-                    <a class="font-sans text-xs tracking-widest uppercase border-b border-black pb-0.5 hover:text-zinc-400 transition-colors" href="Portofolio.html">Lihat Karya →</a>
+                    <span class="font-sans text-xs tracking-widest uppercase text-zinc-400 block mb-4 sm:mb-6">02 / Pengalaman Pengguna & Kreativitas Visual</span>
+                    <h3 style="font-family:'Noto Serif',serif" class="text-2xl font-bold mb-4">Harmoni Logika dan Estetika</h3>
+                    <p class="text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 text-zinc-600 font-serif">
+                        Memadukan ketelitian teknis dengan kepekaan artistik. Dari perancangan wireframe interaktif di Figma, implementasi antarmuka responsif modern menggunakan Tailwind CSS, hingga karya ilustrasi digital dan desain karakter berkonsep kuat.
+                    </p>
+                    <a class="font-sans text-xs tracking-widest uppercase border-b border-black pb-0.5 hover:text-zinc-400 transition-colors inline-flex items-center gap-1" href="Portofolio.html">
+                        <span>Jelajahi Galeri Portofolio</span>
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
                 </div>
             </div>
         </section>
@@ -210,6 +218,136 @@
                 }
             });
         }
+
+        /* ── Pool Proyek Unggulan Dinamis ── */
+        const FEATURED_POOL = [
+            {
+                title: 'CineGuess — Movie Quiz & Poster Studio',
+                category: 'Web Audio API · TMDB CDN · Game Interaktif',
+                desc: 'Aplikasi kuis tebak film bertema cinema noir luxury dengan progressive poster unblur 4K, teka-teki alur emoji, dan sintesis audio real-time.',
+                year: '2026',
+                img: './img/cineguess.png',
+                link: 'CineGuess.html',
+                badge: 'Baru 🎬'
+            },
+            {
+                title: 'SnapCraft — Aesthetic Korean Photobooth',
+                category: 'Webcam API · HTML5 Canvas · Photo Strip',
+                desc: 'Self-photo studio estetik ala Life4Cuts dengan 8 filter real-time, kamera flip mirror, stiker lucu drag-and-drop, dan ekspor instan.',
+                year: '2026',
+                img: './img/snapcraft.png',
+                link: 'SnapCraft.html',
+                badge: 'Live App 📸'
+            },
+            {
+                title: 'PaletCraft — Smart Palette & Contrast Studio',
+                category: 'Vanilla JS · WCAG 2.1 Contrast · UI Preview',
+                desc: 'Studio generator palet warna harmonis dengan evaluasi aksesibilitas WCAG 2.1 otomatis, simulasi live UI mockup, dan ekspor CSS/Tailwind.',
+                year: '2026',
+                img: './img/paletcraft.png',
+                link: 'PaletCraft.html',
+                badge: 'Live Tool 🎨'
+            },
+            {
+                title: 'Sistem Informasi Polda Jatim',
+                category: 'Laravel · MySQL · Docker · Backend Resmi',
+                desc: 'Sistem manajemen data telekomunikasi resmi kepolisian untuk inventarisasi perangkat Alkom, Tower, dan Repeater wilayah.',
+                year: '2025',
+                img: './img/polda.png',
+                link: 'Portofolio.html',
+                badge: 'Magang 🛡️'
+            },
+            {
+                title: 'Fleet Management System SMR',
+                category: 'Laravel · MySQL · Chart.js · Dashboard',
+                desc: 'Dashboard terpadu pemantauan operasional armada alat berat, pelacakan operator, penjadwalan maintenance rutin, dan persewaan.',
+                year: '2026',
+                img: './img/smsr.png',
+                link: 'Portofolio.html',
+                badge: 'Full-stack 🚜'
+            },
+            {
+                title: 'Sistem Informasi Pariwisata Trenggalek',
+                category: 'Algoritma PSO · Laravel · Skripsi',
+                desc: 'Sistem rekomendasi pariwisata cerdas dengan optimasi Particle Swarm Optimization untuk rute perjalanan dengan jarak tempuh minimum.',
+                year: '2026',
+                img: './img/PSO.png',
+                link: 'Portofolio.html',
+                badge: 'Skripsi 🗺️'
+            },
+            {
+                title: 'Two-Phase PSO Route Minimization',
+                category: 'Jurnal SINTA 2 · Scientific Research · Python',
+                desc: 'Publikasi artikel ilmiah pada jurnal nasional terakreditasi SINTA 2 mengenai permodelan komputasi Two-Phase PSO untuk minimasi jarak rute.',
+                year: '2026',
+                img: './img/PSO.png',
+                link: 'Portofolio.html',
+                badge: 'SINTA 2 📚'
+            },
+            {
+                title: 'Deteksi Penyakit Daun Kentang (CNN)',
+                category: 'Python · TensorFlow · Flask · Deep Learning',
+                desc: 'Aplikasi diagnosis dini penyakit tanaman kentang berbasis Convolutional Neural Networks dengan akurasi pengujian model di atas 95%.',
+                year: '2024',
+                img: './img/potato.jpg',
+                link: 'Portofolio.html',
+                badge: 'AI / ML 🌿'
+            },
+            {
+                title: 'Anniversary Interactive Website',
+                category: 'HTML5 · CSS · JS · Netlify',
+                desc: 'Pengalaman web personal dengan animasi karakter pixel art yang mengikuti kursor, alur musik latar, dan pembaca metadata foto EXIF.',
+                year: '2024',
+                img: './img/aniv.png',
+                link: 'https://malikarzqn12.netlify.app/',
+                badge: 'Kreatif 💖'
+            }
+        ];
+
+        /* ── Fungsi Acak Proyek (Berbeda Setiap Refresh / Klik) ── */
+        function renderRandomProjects() {
+            const grid = document.getElementById('dynamic-featured-grid');
+            if (!grid) return;
+
+            grid.style.opacity = '0';
+
+            setTimeout(() => {
+                // Acak dan ambil 2 proyek secara independen
+                const shuffled = [...FEATURED_POOL].sort(() => Math.random() - 0.5);
+                const selected = shuffled.slice(0, 2);
+
+                grid.innerHTML = selected.map(p => `
+                    <a href="${p.link}" class="group block" ${p.link.startsWith('http') ? 'target="_blank"' : ''}>
+                        <div class="aspect-video bg-zinc-100 overflow-hidden mb-4 sm:mb-6 relative flex items-center justify-center border border-gray-100 shadow-sm">
+                            <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='./img/polda.png'"/>
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                                <span class="font-sans text-xs tracking-widest uppercase text-white border border-white px-5 py-2.5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                                    Buka Proyek →
+                                </span>
+                            </div>
+                            <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-md text-black font-sans text-[11px] font-semibold tracking-wider uppercase px-2.5 py-1 shadow-sm">
+                                ${p.badge}
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-start gap-4 mb-2">
+                            <div>
+                                <h3 style="font-family:'Noto Serif',serif" class="text-xl sm:text-2xl font-bold text-black group-hover:text-zinc-600 transition-colors">
+                                    ${p.title}
+                                </h3>
+                                <p class="font-sans text-xs uppercase tracking-widest text-zinc-400 mt-1">${p.category}</p>
+                            </div>
+                            <span style="font-family:'Noto Serif',serif" class="text-sm italic text-zinc-400 shrink-0">${p.year}</span>
+                        </div>
+                        <p class="text-sm text-zinc-600 leading-relaxed font-serif">${p.desc}</p>
+                    </a>
+                `).join('');
+
+                grid.style.opacity = '1';
+            }, 150);
+        }
+
+        // Render otomatis setiap refresh / saat halaman dimuat
+        renderRandomProjects();
     </script>
 </body>
 </html>
